@@ -3,12 +3,14 @@ import type { SimulationMeta } from './types';
 import EulerIcon from './euler/EulerIcon';
 import DecayIcon from './decay/DecayIcon';
 import TitrationIcon from './titration/TitrationIcon';
+import RiemannIcon from './riemann/RiemannIcon';
 
 // Composants chargés en différé : Recharts & co ne sont téléchargés qu'à l'ouverture
 // d'une simulation, pas sur la galerie d'accueil.
 const EulerSimulation = lazy(() => import('./euler/EulerSimulation'));
 const DecaySimulation = lazy(() => import('./decay/DecaySimulation'));
 const TitrationSimulation = lazy(() => import('./titration/TitrationSimulation'));
+const RiemannSimulation = lazy(() => import('./riemann/RiemannSimulation'));
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -17,6 +19,17 @@ const TitrationSimulation = lazy(() => import('./titration/TitrationSimulation')
  * (id, catégorie, titre/description FR-EN, icône, composant).
  */
 export const simulations: SimulationMeta[] = [
+  {
+    id: 'riemann',
+    category: 'maths',
+    title: { fr: 'Sommes de Riemann', en: 'Riemann sums' },
+    description: {
+      fr: 'Méthode des rectangles : approcher une intégrale et encadrer son aire.',
+      en: 'Rectangle method: approximating an integral and bracketing its area.',
+    },
+    icon: RiemannIcon,
+    component: RiemannSimulation,
+  },
   {
     id: 'euler',
     category: 'maths',
