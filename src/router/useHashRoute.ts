@@ -5,10 +5,15 @@ export type Route = { name: 'gallery' } | { name: 'sim'; id: string };
 export const galleryHref = '#/';
 export const simHref = (id: string): string => `#/sim/${id}`;
 
-function parse(hash: string): Route {
+export function parse(hash: string): Route {
   const parts = hash.replace(/^#/, '').split('/').filter(Boolean);
   if (parts[0] === 'sim' && parts[1]) {
-    return { name: 'sim', id: decodeURIComponent(parts[1]) };
+    try {
+      return { name: 'sim', id: decodeURIComponent(parts[1]) };
+    } catch {
+      // Hash mal formé (ex. séquence %xx invalide) → on retombe sur la galerie.
+      return { name: 'gallery' };
+    }
   }
   return { name: 'gallery' };
 }

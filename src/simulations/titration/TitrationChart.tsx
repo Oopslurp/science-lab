@@ -71,7 +71,7 @@ export default function TitrationChart({
             label={{ value: labels.equivalence, position: 'insideTopRight', fill: TITRATION_COLORS.equivalence, fontSize: 11 }}
           />
           <Line
-            type="monotone"
+            type="linear"
             dataKey="pH"
             stroke={TITRATION_COLORS.curve}
             strokeWidth={2.5}

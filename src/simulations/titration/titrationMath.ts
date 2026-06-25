@@ -13,12 +13,16 @@ export interface TitrationParams {
 
 /** Volume équivalent : Ca·Va = Cb·Ve ⇒ Ve = Ca·Va / Cb. */
 export function equivalenceVolume({ ca, cb, va }: TitrationParams): number {
-  return (ca * va) / cb;
+  // cb ≤ 0 n'a pas de sens chimique (et est exclu par les sliders) : retour fini.
+  return cb > 0 ? (ca * va) / cb : 0;
 }
 
-// En deçà de cette concentration d'excès (mol/L), l'eau domine : on est au point neutre.
-// Cela garde aussi l'argument du log loin de 0 (pas de −Infinity/NaN dans le graphe).
-const NEUTRAL_CONC = 1e-7;
+/**
+ * En deçà de cette concentration d'excès (mol/L), l'eau domine : on est au point neutre.
+ * Garde aussi l'argument du log loin de 0 (approximation d'affichage, pas une résolution
+ * complète de l'équilibre de l'eau). Exportée pour être documentée/testable.
+ */
+export const NEUTRAL_CONC = 1e-7;
 
 function clampPH(ph: number): number {
   return Math.min(14, Math.max(0, ph));
@@ -35,11 +39,16 @@ export function pHAt(p: TitrationParams, vb: number): number {
   const acid = p.ca * p.va; // mmol
   const base = p.cb * vb; // mmol
   const diff = acid - base; // >0 avant, <0 après, 0 à l'équivalence
-  const conc = Math.abs(diff) / (p.va + vb); // mol/L
+  const vtot = p.va + vb;
+  const conc = vtot > 0 ? Math.abs(diff) / vtot : 0; // mol/L (garde la division)
 
-  if (conc < NEUTRAL_CONC) return 7; // équivalence + voisinage neutre
-  if (diff > 0) return clampPH(-Math.log10(conc)); // excès d'acide
-  return clampPH(14 + Math.log10(conc)); // excès de base
+  let ph: number;
+  if (conc < NEUTRAL_CONC) ph = 7; // équivalence + voisinage neutre
+  else if (diff > 0) ph = -Math.log10(conc); // excès d'acide
+  else ph = 14 + Math.log10(conc); // excès de base
+
+  // Entrées dégénérées (NaN/Infinity) → retour neutre fini plutôt que de polluer le graphe.
+  return Number.isFinite(ph) ? clampPH(ph) : 7;
 }
 
 export function regionAt(p: TitrationParams, vb: number): Region {

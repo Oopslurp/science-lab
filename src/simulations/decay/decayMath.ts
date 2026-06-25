@@ -5,7 +5,8 @@ export interface DecayPoint {
 
 /** Constante radioactive λ = ln2 / t½. */
 export function lambda(halfLife: number): number {
-  return Math.LN2 / halfLife;
+  // t½ ≤ 0 n'a pas de sens (et est exclu par les sliders) : retour fini (pas de désintégration).
+  return halfLife > 0 ? Math.LN2 / halfLife : 0;
 }
 
 /** Loi exacte : N(t) = N₀·e^(−λt). */
