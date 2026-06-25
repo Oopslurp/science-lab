@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
 import type { Lang } from '../i18n/types';
+import type { CategoryId } from './categories';
 
 /** Texte court disponible dans les deux langues (titre, description). */
 export interface LocalizedText {
@@ -11,20 +12,24 @@ export function pick(text: LocalizedText, lang: Lang): string {
   return text[lang];
 }
 
+/** Icône de simulation : petit SVG ligne, taille pilotée par `className`. */
+export type SimulationIcon = ComponentType<{ className?: string }>;
+
 /** Props reçues par CHAQUE composant de simulation, fournies par le registre. */
 export interface SimulationComponentProps {
   meta: SimulationMeta;
-  index: number; // rang d'affichage (1, 2, 3…)
 }
 
 /**
  * Métadonnées d'une simulation.
- * Source unique de vérité : la nav et la page d'accueil sont générées depuis ce type.
- * Ajouter une simulation = créer son composant + ajouter une entrée au registre.
+ * Source unique de vérité : la galerie, les catégories et la nav en découlent.
+ * Ajouter une simulation = créer son composant + son icône, puis ajouter une entrée ici.
  */
 export interface SimulationMeta {
-  id: string; // ancre de scroll + clé unique
+  id: string; // route (#/sim/<id>) + clé unique
+  category: CategoryId;
   title: LocalizedText;
-  description: LocalizedText; // courte, affichée en sous-titre de section
+  description: LocalizedText; // courte, affichée sur la case et en sous-titre
+  icon: SimulationIcon;
   component: ComponentType<SimulationComponentProps>;
 }

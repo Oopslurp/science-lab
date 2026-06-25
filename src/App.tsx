@@ -1,32 +1,47 @@
+import { useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
-import type { NavItem } from './components/NavBar';
+import SimulationGallery from './components/SimulationGallery';
 import { useTranslation } from './i18n/useTranslation';
+import { galleryHref, useHashRoute } from './router/useHashRoute';
 import { simulations } from './simulations/registry';
-import { pick } from './simulations/types';
 
 export default function App() {
-  const { lang } = useTranslation();
+  const { t } = useTranslation();
+  const route = useHashRoute();
 
-  // Nav générée automatiquement depuis le registre de simulations.
-  const navItems: NavItem[] = simulations.map((s) => ({
-    id: s.id,
-    label: pick(s.title, lang),
-  }));
+  // Repart en haut de page à chaque changement de vue.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [route]);
+
+  const selected =
+    route.name === 'sim' ? simulations.find((s) => s.id === route.id) : undefined;
 
   return (
     <div id="top" className="min-h-screen">
-      <Header navItems={navItems} />
+      <Header />
 
       <main>
-        <Hero />
-
-        {/* Sections générées depuis le registre : ajouter une simulation = une ligne. */}
-        {simulations.map((sim, i) => {
-          const Component = sim.component;
-          return <Component key={sim.id} meta={sim} index={i + 1} />;
-        })}
+        {selected ? (
+          <>
+            <div className="mx-auto max-w-6xl px-4 pt-6 sm:px-6">
+              <a
+                href={galleryHref}
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 transition-colors hover:text-accent"
+              >
+                <span aria-hidden>←</span> {t('gallery.back')}
+              </a>
+            </div>
+            <selected.component meta={selected} />
+          </>
+        ) : (
+          <>
+            <Hero />
+            <SimulationGallery />
+          </>
+        )}
       </main>
 
       <Footer />

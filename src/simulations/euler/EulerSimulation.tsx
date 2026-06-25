@@ -3,6 +3,7 @@ import SimulationSection from '../../components/SimulationSection';
 import Slider from '../../components/ui/Slider';
 import { useTranslation } from '../../i18n/useTranslation';
 import { pick, type SimulationComponentProps } from '../types';
+import { getCategory } from '../categories';
 import { eulerPoints, exactPoints, errorSummary, type EulerParams } from './eulerMath';
 import EulerChart, { COLORS } from './EulerChart';
 
@@ -84,9 +85,10 @@ function fmtNum(v: number): string {
   return v.toFixed(a >= 100 ? 1 : 3);
 }
 
-export default function EulerSimulation({ meta, index }: SimulationComponentProps) {
+export default function EulerSimulation({ meta }: SimulationComponentProps) {
   const { lang } = useTranslation();
   const c = content[lang];
+  const eyebrow = pick(getCategory(meta.category).label, lang);
 
   const [params, setParams] = useState<EulerParams>(DEFAULTS);
   const set = <K extends keyof EulerParams>(key: K, value: number) =>
@@ -104,7 +106,7 @@ export default function EulerSimulation({ meta, index }: SimulationComponentProp
   return (
     <SimulationSection
       id={meta.id}
-      index={index}
+      eyebrow={eyebrow}
       title={pick(meta.title, lang)}
       description={pick(meta.description, lang)}
       theory={

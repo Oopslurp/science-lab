@@ -3,7 +3,7 @@ import { useTranslation } from '../i18n/useTranslation';
 
 interface SimulationSectionProps {
   id: string;
-  index: number;
+  eyebrow: string; // libellé de catégorie (ex. « Physique »)
   title: string;
   description?: string;
   theory: ReactNode;
@@ -44,7 +44,7 @@ function Block({ label, children, accent = false, className = '' }: BlockProps) 
  */
 export default function SimulationSection({
   id,
-  index,
+  eyebrow,
   title,
   description,
   theory,
@@ -55,11 +55,11 @@ export default function SimulationSection({
 }: SimulationSectionProps) {
   const { t } = useTranslation();
   return (
-    <section id={id} className="scroll-mt-20 border-t border-slate-200 py-14 sm:py-20">
+    <section id={id} className="scroll-mt-20 py-12 sm:py-16">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <header className="mb-8">
           <p className="text-sm font-semibold uppercase tracking-widest text-accent">
-            {t('common.simulation')} {index}
+            {eyebrow}
           </p>
           <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             {title}

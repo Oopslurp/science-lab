@@ -21,8 +21,11 @@ const fr = {
   'hero.intro':
     "Une application pour visualiser les concepts scientifiques plutôt que de seulement les lire : manipulez les paramètres et observez l'effet en temps réel.",
 
+  // Galerie
+  'gallery.heading': 'Choisir une simulation',
+  'gallery.back': 'Retour aux simulations',
+
   // Libellés communs aux simulations
-  'common.simulation': 'Simulation',
   'section.theory': 'Théorie',
   'section.controls': 'Contrôles',
   'section.visualization': 'Visualisation',
@@ -42,7 +45,9 @@ const en: Record<keyof typeof fr, string> = {
   'hero.intro':
     'An app to visualize scientific concepts rather than just read about them: adjust the parameters and watch the effect in real time.',
 
-  'common.simulation': 'Simulation',
+  'gallery.heading': 'Choose a simulation',
+  'gallery.back': 'Back to simulations',
+
   'section.theory': 'Theory',
   'section.controls': 'Controls',
   'section.visualization': 'Visualization',
