@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import type { ComponentType, LazyExoticComponent } from 'react';
 import type { Lang } from '../i18n/types';
 import type { CategoryId } from './categories';
 
@@ -14,6 +14,11 @@ export function pick(text: LocalizedText, lang: Lang): string {
 
 /** Icône de simulation : petit SVG ligne, taille pilotée par `className`. */
 export type SimulationIcon = ComponentType<{ className?: string }>;
+
+/** Composant de simulation, éventuellement chargé en différé (React.lazy). */
+export type SimulationComponent =
+  | ComponentType<SimulationComponentProps>
+  | LazyExoticComponent<ComponentType<SimulationComponentProps>>;
 
 /** Props reçues par CHAQUE composant de simulation, fournies par le registre. */
 export interface SimulationComponentProps {
@@ -31,5 +36,5 @@ export interface SimulationMeta {
   title: LocalizedText;
   description: LocalizedText; // courte, affichée sur la case et en sous-titre
   icon: SimulationIcon;
-  component: ComponentType<SimulationComponentProps>;
+  component: SimulationComponent;
 }

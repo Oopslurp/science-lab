@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import SimulationSection from '../../components/SimulationSection';
 import Slider from '../../components/ui/Slider';
+import StatList from '../../components/ui/StatList';
+import PlaybackControls from '../../components/ui/PlaybackControls';
 import { useTranslation } from '../../i18n/useTranslation';
 import { getCategory } from '../categories';
 import { pick, type SimulationComponentProps } from '../types';
@@ -196,22 +198,12 @@ export default function TitrationSimulation({ meta }: SimulationComponentProps) 
             format={(v) => v.toFixed(1)}
             unit="mL"
           />
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={togglePlay}
-              className="flex-1 rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-700"
-            >
-              {playing ? c.buttons.pause : c.buttons.play}
-            </button>
-            <button
-              type="button"
-              onClick={reset}
-              className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100"
-            >
-              {c.buttons.reset}
-            </button>
-          </div>
+          <PlaybackControls
+            playing={playing}
+            onToggle={togglePlay}
+            onReset={reset}
+            labels={c.buttons}
+          />
         </div>
       }
       visualization={
@@ -228,14 +220,15 @@ export default function TitrationSimulation({ meta }: SimulationComponentProps) 
             <div className="flex justify-center">
               <SolutionBeaker pH={ph} fill={fill} />
             </div>
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-              <dl className="grid grid-cols-2 gap-x-4 gap-y-2 font-mono text-sm tabular-nums">
-                <Stat label={c.stats.ve} value={`${ve.toFixed(1)} mL`} />
-                <Stat label={c.stats.vb} value={`${vb.toFixed(1)} mL`} />
-                <Stat label={c.stats.ph} value={ph.toFixed(2)} emphasize />
-                <Stat label={c.stats.region} value={c.regions[region]} />
-              </dl>
-            </div>
+            <StatList
+              columns={2}
+              items={[
+                { label: c.stats.ve, value: `${ve.toFixed(1)} mL` },
+                { label: c.stats.vb, value: `${vb.toFixed(1)} mL` },
+                { label: c.stats.ph, value: ph.toFixed(2), emphasize: true },
+                { label: c.stats.region, value: c.regions[region] },
+              ]}
+            />
           </div>
         </div>
       }
@@ -248,22 +241,5 @@ export default function TitrationSimulation({ meta }: SimulationComponentProps) 
       }
       curriculum={<p>{c.curriculum}</p>}
     />
-  );
-}
-
-function Stat({
-  label,
-  value,
-  emphasize = false,
-}: {
-  label: string;
-  value: string;
-  emphasize?: boolean;
-}) {
-  return (
-    <div>
-      <dt className="font-sans text-[11px] uppercase tracking-wide text-slate-400">{label}</dt>
-      <dd className={emphasize ? 'text-accent' : 'text-slate-800'}>{value}</dd>
-    </div>
   );
 }

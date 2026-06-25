@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import SimulationSection from '../../components/SimulationSection';
 import Slider from '../../components/ui/Slider';
+import Legend from '../../components/ui/Legend';
+import StatList from '../../components/ui/StatList';
 import { useTranslation } from '../../i18n/useTranslation';
 import { pick, type SimulationComponentProps } from '../types';
 import { getCategory } from '../categories';
@@ -159,29 +161,27 @@ export default function EulerSimulation({ meta }: SimulationComponentProps) {
         <div className="space-y-4">
           <EulerChart eulerPts={eulerPts} exactPts={exactPts} y0={params.y0} k={params.k} />
 
-          {/* Légende */}
-          <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-600">
-            <LegendItem color={COLORS.exact} label={c.legend.exact} />
-            <LegendItem color={COLORS.euler} label={c.legend.euler} dotted={false} />
-            <LegendItem color={COLORS.error} label={c.legend.error} dotted />
-          </div>
+          <Legend
+            items={[
+              { color: COLORS.exact, label: c.legend.exact, variant: 'line' },
+              { color: COLORS.euler, label: c.legend.euler, variant: 'line' },
+              { color: COLORS.error, label: c.legend.error, variant: 'line', dashed: true },
+            ]}
+          />
 
-          {/* Statistiques d'erreur au point final */}
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-              {c.stats.title} {err.xMax.toFixed(2)}
-            </p>
-            <dl className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-sm tabular-nums sm:grid-cols-4">
-              <Stat label={c.stats.exact} value={fmtNum(err.exactValue)} />
-              <Stat label={c.stats.euler} value={fmtNum(err.eulerValue)} />
-              <Stat label={c.stats.abs} value={fmtNum(err.absolute)} />
-              <Stat
-                label={c.stats.rel}
-                value={`${(err.relative * 100).toFixed(1)} %`}
-                emphasize
-              />
-            </dl>
-          </div>
+          <StatList
+            title={`${c.stats.title} ${err.xMax.toFixed(2)}`}
+            items={[
+              { label: c.stats.exact, value: fmtNum(err.exactValue) },
+              { label: c.stats.euler, value: fmtNum(err.eulerValue) },
+              { label: c.stats.abs, value: fmtNum(err.absolute) },
+              {
+                label: c.stats.rel,
+                value: `${(err.relative * 100).toFixed(1)} %`,
+                emphasize: true,
+              },
+            ]}
+          />
         </div>
       }
       observe={
@@ -193,51 +193,5 @@ export default function EulerSimulation({ meta }: SimulationComponentProps) {
       }
       curriculum={<p>{c.curriculum}</p>}
     />
-  );
-}
-
-function LegendItem({
-  color,
-  label,
-  dotted = false,
-}: {
-  color: string;
-  label: string;
-  dotted?: boolean;
-}) {
-  return (
-    <span className="inline-flex items-center gap-1.5">
-      <svg width={20} height={8} aria-hidden>
-        <line
-          x1={0}
-          y1={4}
-          x2={20}
-          y2={4}
-          stroke={color}
-          strokeWidth={2.5}
-          strokeDasharray={dotted ? '3 2' : undefined}
-        />
-      </svg>
-      {label}
-    </span>
-  );
-}
-
-function Stat({
-  label,
-  value,
-  emphasize = false,
-}: {
-  label: string;
-  value: string;
-  emphasize?: boolean;
-}) {
-  return (
-    <div>
-      <dt className="font-sans text-[11px] uppercase tracking-wide text-slate-400">
-        {label}
-      </dt>
-      <dd className={emphasize ? 'text-accent' : 'text-slate-800'}>{value}</dd>
-    </div>
   );
 }

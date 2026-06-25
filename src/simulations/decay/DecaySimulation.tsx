@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import SimulationSection from '../../components/SimulationSection';
 import Slider from '../../components/ui/Slider';
+import Legend from '../../components/ui/Legend';
+import StatList from '../../components/ui/StatList';
+import PlaybackControls from '../../components/ui/PlaybackControls';
 import { useTranslation } from '../../i18n/useTranslation';
 import { getCategory } from '../categories';
 import { pick, type SimulationComponentProps } from '../types';
@@ -185,22 +188,12 @@ export default function DecaySimulation({ meta }: SimulationComponentProps) {
             onChange={setSpeed}
             format={(v) => `${v.toFixed(1)}×`}
           />
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={togglePlay}
-              className="flex-1 rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-700"
-            >
-              {playing ? c.buttons.pause : c.buttons.play}
-            </button>
-            <button
-              type="button"
-              onClick={reset}
-              className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100"
-            >
-              {c.buttons.reset}
-            </button>
-          </div>
+          <PlaybackControls
+            playing={playing}
+            onToggle={togglePlay}
+            onReset={reset}
+            labels={c.buttons}
+          />
         </div>
       }
       visualization={
@@ -216,21 +209,22 @@ export default function DecaySimulation({ meta }: SimulationComponentProps) {
 
           {/* Grille de noyaux */}
           <AtomGrid n0={n0} fraction={fraction} />
-          <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-slate-600">
-            <LegendDot color={DECAY_COLORS.curve} label={c.legend.present} />
-            <LegendDot color="#e2e8f0" label={c.legend.decayed} />
-            <LegendDot color={DECAY_COLORS.marker} label={c.legend.marker} />
-          </div>
+          <Legend
+            items={[
+              { color: DECAY_COLORS.curve, label: c.legend.present },
+              { color: '#e2e8f0', label: c.legend.decayed },
+              { color: DECAY_COLORS.marker, label: c.legend.marker },
+            ]}
+          />
 
-          {/* Statistiques à l'instant t */}
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-            <dl className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-sm tabular-nums sm:grid-cols-4">
-              <Stat label={c.stats.lambda} value={lambda(halfLife).toFixed(3)} />
-              <Stat label={c.stats.remaining} value={Math.round(nNow).toString()} emphasize />
-              <Stat label={c.stats.fraction} value={`${(fraction * 100).toFixed(1)} %`} />
-              <Stat label={c.stats.halfLives} value={(t / halfLife).toFixed(2)} />
-            </dl>
-          </div>
+          <StatList
+            items={[
+              { label: c.stats.lambda, value: lambda(halfLife).toFixed(3) },
+              { label: c.stats.remaining, value: Math.round(nNow).toString(), emphasize: true },
+              { label: c.stats.fraction, value: `${(fraction * 100).toFixed(1)} %` },
+              { label: c.stats.halfLives, value: (t / halfLife).toFixed(2) },
+            ]}
+          />
         </div>
       }
       observe={
@@ -242,31 +236,5 @@ export default function DecaySimulation({ meta }: SimulationComponentProps) {
       }
       curriculum={<p>{c.curriculum}</p>}
     />
-  );
-}
-
-function LegendDot({ color, label }: { color: string; label: string }) {
-  return (
-    <span className="inline-flex items-center gap-1.5">
-      <span className="h-3 w-3 rounded-sm" style={{ backgroundColor: color }} />
-      {label}
-    </span>
-  );
-}
-
-function Stat({
-  label,
-  value,
-  emphasize = false,
-}: {
-  label: string;
-  value: string;
-  emphasize?: boolean;
-}) {
-  return (
-    <div>
-      <dt className="font-sans text-[11px] uppercase tracking-wide text-slate-400">{label}</dt>
-      <dd className={emphasize ? 'text-accent' : 'text-slate-800'}>{value}</dd>
-    </div>
   );
 }

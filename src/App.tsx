@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
@@ -34,7 +34,15 @@ export default function App() {
                 <span aria-hidden>←</span> {t('gallery.back')}
               </a>
             </div>
-            <selected.component meta={selected} />
+            <Suspense
+              fallback={
+                <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+                  <div className="h-64 animate-pulse rounded-xl bg-slate-100" />
+                </div>
+              }
+            >
+              <selected.component meta={selected} />
+            </Suspense>
           </>
         ) : (
           <>

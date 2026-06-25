@@ -1,10 +1,14 @@
+import { lazy } from 'react';
 import type { SimulationMeta } from './types';
-import EulerSimulation from './euler/EulerSimulation';
 import EulerIcon from './euler/EulerIcon';
-import DecaySimulation from './decay/DecaySimulation';
 import DecayIcon from './decay/DecayIcon';
-import TitrationSimulation from './titration/TitrationSimulation';
 import TitrationIcon from './titration/TitrationIcon';
+
+// Composants chargés en différé : Recharts & co ne sont téléchargés qu'à l'ouverture
+// d'une simulation, pas sur la galerie d'accueil.
+const EulerSimulation = lazy(() => import('./euler/EulerSimulation'));
+const DecaySimulation = lazy(() => import('./decay/DecaySimulation'));
+const TitrationSimulation = lazy(() => import('./titration/TitrationSimulation'));
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
