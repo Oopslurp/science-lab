@@ -25,6 +25,7 @@ const content = {
     ],
     curriculum:
       "Terminale spécialité mathématiques : méthode d'Euler pour la résolution approchée des équations différentielles du type y′ = a·y, et lien avec la fonction exponentielle, unique solution de y′ = k·y vérifiant y(0) = y₀.",
+    aria: "Graphe comparant la ligne brisée de la méthode d'Euler à la courbe exacte.",
     labels: {
       y0: 'Valeur initiale y₀',
       k: 'Paramètre k',
@@ -58,6 +59,7 @@ const content = {
     ],
     curriculum:
       "Final-year specialty mathematics: Euler's method for the approximate solution of differential equations of the form y′ = a·y, and its link to the exponential function, the unique solution of y′ = k·y with y(0) = y₀.",
+    aria: "Chart comparing the broken line of Euler's method to the exact curve.",
     labels: {
       y0: 'Initial value y₀',
       k: 'Parameter k',
@@ -159,7 +161,13 @@ export default function EulerSimulation({ meta }: SimulationComponentProps) {
       }
       visualization={
         <div className="space-y-4">
-          <EulerChart eulerPts={eulerPts} exactPts={exactPts} y0={params.y0} k={params.k} />
+          <EulerChart
+            eulerPts={eulerPts}
+            exactPts={exactPts}
+            y0={params.y0}
+            k={params.k}
+            ariaLabel={c.aria}
+          />
 
           <Legend
             items={[

@@ -32,6 +32,8 @@ const content = {
     ],
     curriculum:
       'Terminale spécialité physique-chimie : titrage acide fort–base forte, suivi pH-métrique, repérage du point d’équivalence et relation à l’équivalence Ca·Va = Cb·Vb (Ve = Ca·Va / Cb).',
+    chartAria: 'Courbe du pH en fonction du volume de titrant versé.',
+    beakerAria: 'Bécher, solution à pH',
     labels: {
       ca: "Concentration de l'acide Ca",
       cb: 'Concentration de la base Cb',
@@ -66,6 +68,8 @@ const content = {
     ],
     curriculum:
       'Final-year specialty physics-chemistry: strong acid–strong base titration, pH monitoring, locating the equivalence point and the equivalence relation Ca·Va = Cb·Vb (Ve = Ca·Va / Cb).',
+    chartAria: 'pH curve as a function of the added titrant volume.',
+    beakerAria: 'Beaker, solution at pH',
     labels: {
       ca: 'Acid concentration Ca',
       cb: 'Base concentration Cb',
@@ -214,11 +218,12 @@ export default function TitrationSimulation({ meta }: SimulationComponentProps) 
             currentV={vb}
             vMax={vMax}
             labels={c.chart}
+            ariaLabel={c.chartAria}
           />
 
           <div className="grid items-center gap-4 sm:grid-cols-[auto_1fr]">
             <div className="flex justify-center">
-              <SolutionBeaker pH={ph} fill={fill} />
+              <SolutionBeaker pH={ph} fill={fill} ariaLabel={`${c.beakerAria} ${ph.toFixed(1)}`} />
             </div>
             <StatList
               columns={2}

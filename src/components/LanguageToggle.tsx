@@ -1,16 +1,16 @@
-import { useLanguage } from '../i18n/LanguageContext';
 import type { Lang } from '../i18n/types';
+import { useTranslation } from '../i18n/useTranslation';
 
 const OPTIONS: Lang[] = ['fr', 'en'];
 
 /** Contrôle segmenté FR | EN, branché directement sur le LanguageContext. */
 export default function LanguageToggle() {
-  const { lang, setLang } = useLanguage();
+  const { lang, setLang, t } = useTranslation();
 
   return (
     <div
       role="group"
-      aria-label="Language"
+      aria-label={t('a11y.language')}
       className="inline-flex items-center rounded-lg border border-slate-200 bg-white p-0.5 text-sm font-medium shadow-sm"
     >
       {OPTIONS.map((option) => {

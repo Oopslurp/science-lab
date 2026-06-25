@@ -5,6 +5,7 @@ interface EulerChartProps {
   exactPts: Point[];
   y0: number;
   k: number;
+  ariaLabel: string;
 }
 
 // Couleurs partagées avec la légende (cf. EulerSimulation).
@@ -38,7 +39,13 @@ function fmt(v: number): string {
  * Tracé SVG personnalisé : la ligne brisée d'Euler par-dessus la courbe exacte,
  * avec un segment vertical à chaque pas matérialisant l'erreur d'approximation.
  */
-export default function EulerChart({ eulerPts, exactPts, y0, k }: EulerChartProps) {
+export default function EulerChart({
+  eulerPts,
+  exactPts,
+  y0,
+  k,
+  ariaLabel,
+}: EulerChartProps) {
   const xMax = eulerPts[eulerPts.length - 1].x || 1;
 
   const ys = [...eulerPts, ...exactPts].map((p) => p.y);
@@ -70,7 +77,10 @@ export default function EulerChart({ eulerPts, exactPts, y0, k }: EulerChartProp
       className="h-auto w-full"
       preserveAspectRatio="xMidYMid meet"
       role="img"
+      aria-label={ariaLabel}
     >
+      <title>{ariaLabel}</title>
+
       {/* Grille horizontale + graduations Y */}
       {yTicks.map((ty, i) => (
         <g key={`y${i}`}>

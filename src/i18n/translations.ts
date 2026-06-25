@@ -25,6 +25,9 @@ const fr = {
   'gallery.heading': 'Choisir une simulation',
   'gallery.back': 'Retour aux simulations',
 
+  // Accessibilité
+  'a11y.language': 'Langue',
+
   // Libellés communs aux simulations
   'section.theory': 'Théorie',
   'section.controls': 'Contrôles',
@@ -47,6 +50,8 @@ const en: Record<keyof typeof fr, string> = {
 
   'gallery.heading': 'Choose a simulation',
   'gallery.back': 'Back to simulations',
+
+  'a11y.language': 'Language',
 
   'section.theory': 'Theory',
   'section.controls': 'Controls',

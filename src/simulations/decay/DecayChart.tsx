@@ -18,6 +18,7 @@ interface DecayChartProps {
   n0: number;
   tMax: number;
   labels: { time: string; remaining: string };
+  ariaLabel: string;
 }
 
 export const DECAY_COLORS = {
@@ -33,9 +34,10 @@ export default function DecayChart({
   n0,
   tMax,
   labels,
+  ariaLabel,
 }: DecayChartProps) {
   return (
-    <div className="h-72 w-full">
+    <div className="h-72 w-full" role="img" aria-label={ariaLabel}>
       <ResponsiveContainer>
         <LineChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 16 }}>
           <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />

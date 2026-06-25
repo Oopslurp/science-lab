@@ -34,6 +34,7 @@ const content = {
     ],
     curriculum:
       'Terminale spécialité physique-chimie : loi de décroissance radioactive N(t) = N₀·e^(−λt), constante radioactive λ, demi-vie t½ = ln 2 / λ, et caractère aléatoire de la désintégration d’un noyau individuel.',
+    aria: 'Courbe de décroissance du nombre de noyaux en fonction du temps.',
     labels: {
       n0: 'Nombre initial de noyaux N₀',
       halfLife: 'Demi-vie t½',
@@ -64,6 +65,7 @@ const content = {
     ],
     curriculum:
       'Final-year specialty physics-chemistry: radioactive decay law N(t) = N₀·e^(−λt), decay constant λ, half-life t½ = ln 2 / λ, and the random nature of an individual nuclear decay.',
+    aria: 'Decay curve of the number of nuclei over time.',
     labels: {
       n0: 'Initial number of nuclei N₀',
       halfLife: 'Half-life t½',
@@ -205,6 +207,7 @@ export default function DecaySimulation({ meta }: SimulationComponentProps) {
             n0={n0}
             tMax={TMAX}
             labels={c.chart}
+            ariaLabel={c.aria}
           />
 
           {/* Grille de noyaux */}
