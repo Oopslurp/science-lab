@@ -1,6 +1,8 @@
 import type { SimulationMeta } from './types';
 import EulerSimulation from './euler/EulerSimulation';
 import EulerIcon from './euler/EulerIcon';
+import DecaySimulation from './decay/DecaySimulation';
+import DecayIcon from './decay/DecayIcon';
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -19,5 +21,16 @@ export const simulations: SimulationMeta[] = [
     },
     icon: EulerIcon,
     component: EulerSimulation,
+  },
+  {
+    id: 'decay',
+    category: 'physics',
+    title: { fr: 'Décroissance radioactive', en: 'Radioactive decay' },
+    description: {
+      fr: 'Loi exacte N(t) = N₀·e^(−λt), demi-vie réglable et noyaux qui se désintègrent.',
+      en: 'Exact law N(t) = N₀·e^(−λt), adjustable half-life and decaying nuclei.',
+    },
+    icon: DecayIcon,
+    component: DecaySimulation,
   },
 ];
