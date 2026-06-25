@@ -3,6 +3,8 @@ import EulerSimulation from './euler/EulerSimulation';
 import EulerIcon from './euler/EulerIcon';
 import DecaySimulation from './decay/DecaySimulation';
 import DecayIcon from './decay/DecayIcon';
+import TitrationSimulation from './titration/TitrationSimulation';
+import TitrationIcon from './titration/TitrationIcon';
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -32,5 +34,16 @@ export const simulations: SimulationMeta[] = [
     },
     icon: DecayIcon,
     component: DecaySimulation,
+  },
+  {
+    id: 'titration',
+    category: 'chemistry',
+    title: { fr: 'Titrage acide-base', en: 'Acid–base titration' },
+    description: {
+      fr: 'Courbe pH = f(V) d’un acide fort par une base forte, avec point d’équivalence.',
+      en: 'pH = f(V) curve of a strong acid by a strong base, with equivalence point.',
+    },
+    icon: TitrationIcon,
+    component: TitrationSimulation,
   },
 ];
