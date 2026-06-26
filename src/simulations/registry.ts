@@ -7,6 +7,7 @@ import RiemannIcon from './riemann/RiemannIcon';
 import EquilibriumIcon from './equilibrium/EquilibriumIcon';
 import YoungIcon from './young/YoungIcon';
 import KeplerIcon from './kepler/KeplerIcon';
+import ProjectileIcon from './projectile/ProjectileIcon';
 
 // Composants chargés en différé : Recharts & co ne sont téléchargés qu'à l'ouverture
 // d'une simulation, pas sur la galerie d'accueil.
@@ -17,6 +18,7 @@ const RiemannSimulation = lazy(() => import('./riemann/RiemannSimulation'));
 const EquilibriumSimulation = lazy(() => import('./equilibrium/EquilibriumSimulation'));
 const YoungSimulation = lazy(() => import('./young/YoungSimulation'));
 const KeplerSimulation = lazy(() => import('./kepler/KeplerSimulation'));
+const ProjectileSimulation = lazy(() => import('./projectile/ProjectileSimulation'));
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -79,6 +81,17 @@ export const simulations: SimulationMeta[] = [
     },
     icon: KeplerIcon,
     component: KeplerSimulation,
+  },
+  {
+    id: 'projectile',
+    category: 'physics',
+    title: { fr: 'Champ uniforme (tir parabolique)', en: 'Uniform field (projectile)' },
+    description: {
+      fr: 'Tir dans un champ uniforme (pesanteur ou électrique) : trajectoire et énergie mécanique.',
+      en: 'Launch in a uniform field (gravity or electric): trajectory and mechanical energy.',
+    },
+    icon: ProjectileIcon,
+    component: ProjectileSimulation,
   },
   {
     id: 'titration',
