@@ -6,6 +6,7 @@ import TitrationIcon from './titration/TitrationIcon';
 import RiemannIcon from './riemann/RiemannIcon';
 import EquilibriumIcon from './equilibrium/EquilibriumIcon';
 import YoungIcon from './young/YoungIcon';
+import KeplerIcon from './kepler/KeplerIcon';
 
 // Composants chargés en différé : Recharts & co ne sont téléchargés qu'à l'ouverture
 // d'une simulation, pas sur la galerie d'accueil.
@@ -15,6 +16,7 @@ const TitrationSimulation = lazy(() => import('./titration/TitrationSimulation')
 const RiemannSimulation = lazy(() => import('./riemann/RiemannSimulation'));
 const EquilibriumSimulation = lazy(() => import('./equilibrium/EquilibriumSimulation'));
 const YoungSimulation = lazy(() => import('./young/YoungSimulation'));
+const KeplerSimulation = lazy(() => import('./kepler/KeplerSimulation'));
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -66,6 +68,17 @@ export const simulations: SimulationMeta[] = [
     },
     icon: YoungIcon,
     component: YoungSimulation,
+  },
+  {
+    id: 'kepler',
+    category: 'physics',
+    title: { fr: 'Gravitation (orbites de Kepler)', en: 'Gravitation (Kepler orbits)' },
+    description: {
+      fr: 'Orbite dans un champ de gravitation : intégration semi-implicite et 3ᵉ loi de Kepler.',
+      en: 'Orbit in a gravitational field: symplectic integration and Kepler’s 3rd law.',
+    },
+    icon: KeplerIcon,
+    component: KeplerSimulation,
   },
   {
     id: 'titration',
