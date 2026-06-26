@@ -4,6 +4,7 @@ import EulerIcon from './euler/EulerIcon';
 import DecayIcon from './decay/DecayIcon';
 import TitrationIcon from './titration/TitrationIcon';
 import RiemannIcon from './riemann/RiemannIcon';
+import EquilibriumIcon from './equilibrium/EquilibriumIcon';
 
 // Composants chargés en différé : Recharts & co ne sont téléchargés qu'à l'ouverture
 // d'une simulation, pas sur la galerie d'accueil.
@@ -11,6 +12,7 @@ const EulerSimulation = lazy(() => import('./euler/EulerSimulation'));
 const DecaySimulation = lazy(() => import('./decay/DecaySimulation'));
 const TitrationSimulation = lazy(() => import('./titration/TitrationSimulation'));
 const RiemannSimulation = lazy(() => import('./riemann/RiemannSimulation'));
+const EquilibriumSimulation = lazy(() => import('./equilibrium/EquilibriumSimulation'));
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -62,5 +64,16 @@ export const simulations: SimulationMeta[] = [
     },
     icon: TitrationIcon,
     component: TitrationSimulation,
+  },
+  {
+    id: 'equilibrium',
+    category: 'chemistry',
+    title: { fr: 'Équilibre chimique', en: 'Chemical equilibrium' },
+    description: {
+      fr: 'Quotient de réaction Qr vs constante K : avancement d’un acide faible à l’équilibre.',
+      en: 'Reaction quotient Qr vs constant K: weak-acid advancement at equilibrium.',
+    },
+    icon: EquilibriumIcon,
+    component: EquilibriumSimulation,
   },
 ];
