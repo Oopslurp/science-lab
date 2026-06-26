@@ -53,8 +53,8 @@ export function acceleration(pos: Vec2, gm = GM): Vec2 {
  *   1) a = −GM·r / r³
  *   2) v_{n+1} = v_n + a·dt        (vitesse mise à jour D'ABORD)
  *   3) r_{n+1} = r_n + v_{n+1}·dt  (position avec la vitesse DÉJÀ mise à jour)
- * C'est cette variante (et non l'Euler explicite) qui conserve bien l'énergie
- * et évite que l'orbite parte en spirale.
+ * C'est cette variante (et non l'Euler explicite) qui limite la dérive d'énergie
+ * (erreur bornée/oscillante, sans gonflement séculaire) et évite la spirale.
  */
 export function gravityStep(pos: Vec2, vel: Vec2, dt: number, gm = GM): OrbitState {
   const a = acceleration(pos, gm);
@@ -106,6 +106,8 @@ export function measureOrbitalPeriod(
   dt = DEFAULT_DT,
   maxTime = 500
 ): number | null {
+  // Garde : dt ≤ 0 (ou maxTime ≤ 0) ferait boucler indéfiniment (t n'avance plus).
+  if (!(dt > 0) || !(maxTime > 0)) return null;
   let state = initialState(r0, v0Pct);
   let t = 0;
   let swept = 0;

@@ -53,7 +53,8 @@ export function pHAt(p: TitrationParams, vb: number): number {
 
 export function regionAt(p: TitrationParams, vb: number): Region {
   const diff = p.ca * p.va - p.cb * vb;
-  const conc = Math.abs(diff) / (p.va + vb);
+  const vtot = p.va + vb;
+  const conc = vtot > 0 ? Math.abs(diff) / vtot : 0; // même garde que pHAt
   if (conc < NEUTRAL_CONC) return 'at';
   return diff > 0 ? 'before' : 'after';
 }
@@ -63,9 +64,10 @@ export function titrationCurve(
   vMax: number,
   samples = 240
 ): TitrationPoint[] {
+  const n = Math.max(1, Math.floor(samples)); // garde : pas de division par 0
   const pts: TitrationPoint[] = [];
-  for (let i = 0; i <= samples; i++) {
-    const v = (vMax * i) / samples;
+  for (let i = 0; i <= n; i++) {
+    const v = (vMax * i) / n;
     pts.push({ v, pH: pHAt(p, v) });
   }
   return pts;

@@ -114,7 +114,7 @@ export default function TitrationSimulation({ meta }: SimulationComponentProps) 
     let raf = 0;
     let last = performance.now();
     const tick = (now: number) => {
-      const dt = (now - last) / 1000;
+      const dt = Math.min((now - last) / 1000, 0.1); // plafond anti-saut au retour d'onglet
       last = now;
       setRawVb((prev) => {
         const next = prev + dt * (vMax / 10);

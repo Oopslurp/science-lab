@@ -31,9 +31,10 @@ export function eulerPoints({ y0, k, h, steps }: EulerParams): Point[] {
 
 /** Échantillonnage fin de la solution exacte sur [0, xMax] (pour tracer une courbe lisse). */
 export function exactPoints(y0: number, k: number, xMax: number, samples = 240): Point[] {
+  const n = Math.max(1, Math.floor(samples)); // garde : pas de division par 0
   const pts: Point[] = [];
-  for (let i = 0; i <= samples; i++) {
-    const x = (xMax * i) / samples;
+  for (let i = 0; i <= n; i++) {
+    const x = (xMax * i) / n;
     pts.push({ x, y: exact(y0, k, x) });
   }
   return pts;

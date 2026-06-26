@@ -47,9 +47,10 @@ export interface QrPoint {
 }
 
 export function equilibriumCurve(c0: number, bound: number, samples = 160): QrPoint[] {
+  const n = Math.max(1, Math.floor(samples)); // garde : pas de division par 0
   const pts: QrPoint[] = [];
-  for (let i = 0; i <= samples; i++) {
-    const xi = (bound * i) / samples;
+  for (let i = 0; i <= n; i++) {
+    const xi = (bound * i) / n;
     pts.push({ xi, qr: reactionQuotient(c0, xi) });
   }
   return pts;

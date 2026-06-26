@@ -37,9 +37,10 @@ export function intensityProfile(
   aMm: number,
   samples = 240
 ): IntensityPoint[] {
+  const n = Math.max(1, Math.floor(samples)); // garde : pas de division par 0
   const pts: IntensityPoint[] = [];
-  for (let k = 0; k <= samples; k++) {
-    const yM = -SCREEN_HALF_WIDTH_M + (2 * SCREEN_HALF_WIDTH_M * k) / samples;
+  for (let k = 0; k <= n; k++) {
+    const yM = -SCREEN_HALF_WIDTH_M + (2 * SCREEN_HALF_WIDTH_M * k) / n;
     pts.push({ yMm: yM * 1000, i: intensity(lambdaNm, dMeters, aMm, yM) });
   }
   return pts;

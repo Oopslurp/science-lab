@@ -35,7 +35,7 @@ const content = {
     theory: [
       'Un corps en orbite autour d’un astre central subit une accélération gravitationnelle dirigée vers le centre, donnée par :',
       'où r est le vecteur position et r³ le cube de sa norme. Ici GM = 1 en unités normalisées (pas de valeurs astronomiques réelles). On lance le corps depuis une distance r₀ avec une vitesse perpendiculaire au rayon ; à la vitesse circulaire v_circ = √(GM/r₀), l’orbite est un cercle parfait.',
-      'L’intégration utilise la méthode d’Euler semi-implicite (symplectique) : on met à jour la vitesse avant la position. Contrairement à l’Euler explicite (simulation de maths), elle conserve l’énergie et n’envoie pas l’orbite en spirale. L’orbite elliptique et l’évasion sont un enrichissement au-delà du strict exigible.',
+      'L’intégration utilise la méthode d’Euler semi-implicite (symplectique) : on met à jour la vitesse avant la position. Contrairement à l’Euler explicite (simulation de maths), elle limite la dérive d’énergie (erreur bornée, pas de gonflement progressif) et n’envoie pas l’orbite en spirale. L’orbite elliptique et l’évasion sont un enrichissement au-delà du strict exigible.',
     ],
     observe: [
       'v₀ = 100 % : orbite circulaire parfaite, distance au centre constante.',
@@ -59,7 +59,7 @@ const content = {
     theory: [
       'A body orbiting a central star feels a gravitational acceleration directed toward the centre, given by:',
       'where r is the position vector and r³ the cube of its magnitude. Here GM = 1 in normalised units (not real astronomical values). The body is launched from a distance r₀ with a velocity perpendicular to the radius; at the circular speed v_circ = √(GM/r₀), the orbit is a perfect circle.',
-      'Integration uses the semi-implicit (symplectic) Euler method: velocity is updated before position. Unlike explicit Euler (the maths simulation), it conserves energy and does not send the orbit spiralling. The elliptical orbit and escape are enrichment beyond the strict syllabus.',
+      'Integration uses the semi-implicit (symplectic) Euler method: velocity is updated before position. Unlike explicit Euler (the maths simulation), it keeps the energy drift bounded (no progressive growth) and does not send the orbit spiralling. The elliptical orbit and escape are enrichment beyond the strict syllabus.',
     ],
     observe: [
       'v₀ = 100 %: perfect circular orbit, constant distance to the centre.',

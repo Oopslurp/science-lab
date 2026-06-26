@@ -83,4 +83,11 @@ describe('keplerMath', () => {
       expect(relErr).toBeLessThan(0.005);
     }
   });
+
+  it('measureOrbitalPeriod : gardes → null (dt ≤ 0, évasion, collision)', () => {
+    expect(measureOrbitalPeriod(1, 100, 0)).toBeNull(); // dt nul : pas de boucle infinie
+    expect(measureOrbitalPeriod(1, 100, -0.004)).toBeNull(); // dt négatif
+    expect(measureOrbitalPeriod(1, 150)).toBeNull(); // évasion (> √2·100 %) : aucun tour bouclé
+    expect(measureOrbitalPeriod(0.5, 40)).toBeNull(); // trop lent : plonge → collision
+  });
 });
