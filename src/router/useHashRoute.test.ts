@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { parse } from './useHashRoute';
+import { parse, simHref } from './useHashRoute';
+import { simulations } from '../simulations/registry';
 
 describe('useHashRoute.parse', () => {
   it('vide ou racine → galerie', () => {
@@ -17,5 +18,11 @@ describe('useHashRoute.parse', () => {
 
   it('encodage malformé ne lève pas d’exception → galerie', () => {
     expect(parse('#/sim/%E0%A4%A')).toEqual({ name: 'gallery' });
+  });
+
+  it('chaque simulation du registre fait un aller-retour via le routeur', () => {
+    for (const s of simulations) {
+      expect(parse(simHref(s.id))).toEqual({ name: 'sim', id: s.id });
+    }
   });
 });
