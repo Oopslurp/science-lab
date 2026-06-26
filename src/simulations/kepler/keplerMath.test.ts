@@ -7,6 +7,9 @@ import {
   gravityStep,
   initialState,
   isCollision,
+  measureOrbitalPeriod,
+  orbitalPeriod,
+  semiMajorAxis,
   theoreticalPeriod,
 } from './keplerMath';
 
@@ -52,5 +55,32 @@ describe('keplerMath', () => {
     expect(s.pos).toEqual({ x: 1, y: 0 });
     expect(s.vel.x).toBeCloseTo(0);
     expect(s.vel.y).toBeCloseTo(1);
+  });
+
+  it('semiMajorAxis : a = r₀ au circulaire, fini pour une ellipse', () => {
+    expect(semiMajorAxis(1, circularSpeed(1))).toBeCloseTo(1, 12); // v₀ = v_circ ⇒ a = r₀
+    expect(semiMajorAxis(2, circularSpeed(2))).toBeCloseTo(2, 12);
+    expect(Number.isFinite(semiMajorAxis(1, 0.8 * circularSpeed(1)))).toBe(true);
+    expect(semiMajorAxis(1, escapeSpeed(1))).toBe(Infinity); // évasion : non liée
+  });
+
+  it('période mesurée ≈ période vis-viva 2π√(a³/GM) — cercle + ellipses', () => {
+    // Au moins un cas circulaire et plusieurs ellipses d'excentricités différentes.
+    const cases: Array<{ r0: number; v0Pct: number }> = [
+      { r0: 1, v0Pct: 100 }, // cercle (e = 0)
+      { r0: 1, v0Pct: 80 }, // ellipse (départ apoapside)
+      { r0: 1, v0Pct: 120 }, // ellipse (départ périapside)
+      { r0: 1.5, v0Pct: 70 }, // ellipse plus excentrique
+    ];
+
+    for (const { r0, v0Pct } of cases) {
+      const v0 = (v0Pct / 100) * circularSpeed(r0);
+      const tTheo = orbitalPeriod(semiMajorAxis(r0, v0));
+      const tMeasured = measureOrbitalPeriod(r0, v0Pct);
+      expect(tMeasured).not.toBeNull();
+      const relErr = Math.abs((tMeasured as number) - tTheo) / tTheo;
+      // Écart résiduel mesuré ≤ 0,06 % (vient du pas dt, pas d'un bug) ; marge ×8.
+      expect(relErr).toBeLessThan(0.005);
+    }
   });
 });

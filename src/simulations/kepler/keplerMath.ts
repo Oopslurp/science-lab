@@ -7,6 +7,10 @@ export const GM = 1;
 // 1/r² devient numériquement instable → on arrête proprement (pas de NaN/Infinity).
 export const R_MIN = 0.05;
 
+// Pas d'intégration physique fixe, partagé par la simulation et la mesure de période
+// (la tolérance des tests dépend de ce choix : l'erreur résiduelle vient de ce dt).
+export const DEFAULT_DT = 0.004;
+
 export interface Vec2 {
   x: number;
   y: number;
@@ -71,4 +75,55 @@ export function theoreticalPeriod(r0: number, gm = GM): number {
 export function initialState(r0: number, v0Pct: number): OrbitState {
   const speed = (v0Pct / 100) * circularSpeed(r0);
   return { pos: { x: r0, y: 0 }, vel: { x: 0, y: speed } };
+}
+
+/**
+ * Demi-grand axe a depuis les conditions initiales (équation de vis-viva) :
+ *   a = GM / (2·GM/r₀ − v₀²).
+ * Formule générale : a = r₀ exactement pour une orbite circulaire, a > 0 pour une ellipse.
+ * Renvoie +Infinity si v₀ ≥ vitesse de libération (orbite non liée : parabole/hyperbole).
+ */
+export function semiMajorAxis(r0: number, v0: number, gm = GM): number {
+  const denom = (2 * gm) / r0 - v0 * v0;
+  if (denom <= 0) return Infinity; // pas d'orbite liée
+  return gm / denom;
+}
+
+/** Période orbitale depuis le demi-grand axe : T = 2π·√(a³/GM) (3ᵉ loi de Kepler). */
+export function orbitalPeriod(a: number, gm = GM): number {
+  if (!(a > 0) || !Number.isFinite(a)) return Infinity; // orbite non liée
+  return 2 * Math.PI * Math.sqrt(a ** 3 / gm);
+}
+
+/**
+ * Mesure NUMÉRIQUE de la période : intègre l'orbite (mêmes pas que la simulation)
+ * et renvoie le temps simulé pour balayer un tour complet (2π), ou null si aucun tour
+ * n'est bouclé (collision ou orbite non liée) avant `maxTime`.
+ */
+export function measureOrbitalPeriod(
+  r0: number,
+  v0Pct: number,
+  dt = DEFAULT_DT,
+  maxTime = 500
+): number | null {
+  let state = initialState(r0, v0Pct);
+  let t = 0;
+  let swept = 0;
+  let lastAngle = Math.atan2(state.pos.y, state.pos.x);
+
+  while (t < maxTime) {
+    state = gravityStep(state.pos, state.vel, dt);
+    t += dt;
+    if (isCollision(state.pos)) return null;
+
+    const ang = Math.atan2(state.pos.y, state.pos.x);
+    let d = ang - lastAngle;
+    if (d > Math.PI) d -= 2 * Math.PI;
+    else if (d < -Math.PI) d += 2 * Math.PI;
+    swept += d;
+    lastAngle = ang;
+
+    if (Math.abs(swept) >= 2 * Math.PI) return t;
+  }
+  return null;
 }

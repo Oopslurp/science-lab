@@ -8,17 +8,21 @@ import { useTranslation } from '../../i18n/useTranslation';
 import { getCategory } from '../categories';
 import { pick, type SimulationComponentProps } from '../types';
 import {
+  DEFAULT_DT,
+  circularSpeed,
   gravityStep,
   initialState,
   isCollision,
-  theoreticalPeriod,
+  orbitalPeriod,
+  semiMajorAxis,
   type OrbitState,
   type Vec2,
 } from './keplerMath';
 import OrbitView from './OrbitView';
 
-// Pas d'intégration physique FIXE (découplé du framerate).
-const DT = 0.004;
+// Pas d'intégration physique FIXE (découplé du framerate), partagé avec keplerMath
+// pour que la période mesurée affichée corresponde à celle vérifiée par les tests.
+const DT = DEFAULT_DT;
 // Plafond de sous-pas par frame : empêche le navigateur de tenter des milliers de
 // pas d'un coup au retour d'un onglet resté en arrière-plan.
 const MAX_SUBSTEPS = 240;
@@ -38,13 +42,13 @@ const content = {
       'v₀ < 100 % : le point de départ est le plus éloigné (apoapside) ; l’orbite plonge plus près ailleurs.',
       'v₀ > 100 % (sous le seuil d’évasion) : le point de départ est le plus proche (périapside) ; l’orbite s’éloigne davantage ailleurs.',
       'v₀ ≥ 141,4 % (√2) : la trajectoire ne revient pas, le corps s’échappe.',
-      'À vitesse circulaire, fais varier r₀ : T²/r₀³ reste constant (3ᵉ loi de Kepler).',
+      'Le demi-grand axe a est déduit des conditions initiales (vis-viva) : la période théorique 2π√(a³/GM) colle au temps mesuré, pour le cercle comme pour l’ellipse (3ᵉ loi de Kepler ; l’écart résiduel vient du pas dt).',
     ],
     curriculum:
       'Spécialité physique-chimie : mouvement dans un champ de gravitation, vecteurs vitesse/accélération en mouvement circulaire et 3ᵉ loi de Kepler (cas circulaire, exigible). L’orbite elliptique et le seuil d’évasion sont un enrichissement visuel au-delà du strict exigible.',
     labels: { r0: 'Distance initiale r₀', v0: 'Vitesse initiale (% de v_circ)', speed: 'Vitesse d’animation' },
     buttons: { play: '▶ Lecture', pause: '❚❚ Pause', reset: '↺ Réinitialiser' },
-    stats: { v0: 'Vitesse initiale', tTheo: 'T théorique (circ.)', tMeasured: 'T mesurée', kepler: 'T²/r₀³' },
+    stats: { axis: 'Demi-grand axe a', tTheo: 'T théorique', tMeasured: 'T mesurée', gap: 'Écart théo/mesuré' },
     status: {
       collision: 'Collision avec le corps central — réinitialise pour relancer.',
       escape: 'Régime d’évasion : la trajectoire ne revient pas.',
@@ -62,13 +66,13 @@ const content = {
       'v₀ < 100 %: the start point is the farthest (apoapsis); the orbit dips closer elsewhere.',
       'v₀ > 100 % (below escape): the start point is the closest (periapsis); the orbit reaches farther elsewhere.',
       'v₀ ≥ 141.4 % (√2): the trajectory does not return, the body escapes.',
-      'At circular speed, vary r₀: T²/r₀³ stays constant (Kepler’s 3rd law).',
+      'The semi-major axis a comes from the initial conditions (vis-viva): the theoretical period 2π√(a³/GM) matches the measured time, for circles and ellipses alike (Kepler’s 3rd law; the residual gap is due to the step dt).',
     ],
     curriculum:
       'Specialty physics-chemistry: motion in a gravitational field, velocity/acceleration vectors in circular motion and Kepler’s 3rd law (circular case, required). The elliptical orbit and escape threshold are visual enrichment beyond the strict syllabus.',
     labels: { r0: 'Initial distance r₀', v0: 'Initial speed (% of v_circ)', speed: 'Animation speed' },
     buttons: { play: '▶ Play', pause: '❚❚ Pause', reset: '↺ Reset' },
-    stats: { v0: 'Initial speed', tTheo: 'T theoretical (circ.)', tMeasured: 'T measured', kepler: 'T²/r₀³' },
+    stats: { axis: 'Semi-major axis a', tTheo: 'T theoretical', tMeasured: 'T measured', gap: 'Gap theo/measured' },
     status: {
       collision: 'Collision with the central body — reset to relaunch.',
       escape: 'Escape regime: the trajectory does not return.',
@@ -190,7 +194,13 @@ export default function KeplerSimulation({ meta }: SimulationComponentProps) {
     initOrbit();
   };
 
-  const tTheo = theoreticalPeriod(r0);
+  const v0 = (v0Pct / 100) * circularSpeed(r0);
+  const aAxis = semiMajorAxis(r0, v0); // demi-grand axe (vis-viva), = r₀ au circulaire
+  const tTheo = orbitalPeriod(aAxis); // période théorique générale (cercle + ellipse)
+  const relErrorPct =
+    measuredPeriod && Number.isFinite(tTheo) && tTheo > 0
+      ? (Math.abs(measuredPeriod - tTheo) / tTheo) * 100
+      : null;
   const isEscape = v0Pct >= ESCAPE_PCT;
 
   return (
@@ -264,14 +274,14 @@ export default function KeplerSimulation({ meta }: SimulationComponentProps) {
 
           <StatList
             items={[
-              { label: c.stats.v0, value: `${v0Pct} %` },
-              { label: c.stats.tTheo, value: tTheo.toFixed(2) },
+              { label: c.stats.axis, value: Number.isFinite(aAxis) ? aAxis.toFixed(2) : '—' },
+              { label: c.stats.tTheo, value: Number.isFinite(tTheo) ? tTheo.toFixed(2) : '—' },
+              { label: c.stats.tMeasured, value: measuredPeriod ? measuredPeriod.toFixed(2) : '—' },
               {
-                label: c.stats.tMeasured,
-                value: measuredPeriod ? measuredPeriod.toFixed(2) : '—',
+                label: c.stats.gap,
+                value: relErrorPct !== null ? `${relErrorPct.toFixed(2)} %` : '—',
                 emphasize: true,
               },
-              { label: c.stats.kepler, value: (tTheo ** 2 / r0 ** 3).toFixed(2) },
             ]}
           />
         </div>
