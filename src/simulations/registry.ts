@@ -5,6 +5,7 @@ import DecayIcon from './decay/DecayIcon';
 import TitrationIcon from './titration/TitrationIcon';
 import RiemannIcon from './riemann/RiemannIcon';
 import EquilibriumIcon from './equilibrium/EquilibriumIcon';
+import YoungIcon from './young/YoungIcon';
 
 // Composants chargés en différé : Recharts & co ne sont téléchargés qu'à l'ouverture
 // d'une simulation, pas sur la galerie d'accueil.
@@ -13,6 +14,7 @@ const DecaySimulation = lazy(() => import('./decay/DecaySimulation'));
 const TitrationSimulation = lazy(() => import('./titration/TitrationSimulation'));
 const RiemannSimulation = lazy(() => import('./riemann/RiemannSimulation'));
 const EquilibriumSimulation = lazy(() => import('./equilibrium/EquilibriumSimulation'));
+const YoungSimulation = lazy(() => import('./young/YoungSimulation'));
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -53,6 +55,17 @@ export const simulations: SimulationMeta[] = [
     },
     icon: DecayIcon,
     component: DecaySimulation,
+  },
+  {
+    id: 'young',
+    category: 'physics',
+    title: { fr: 'Interférences (fentes de Young)', en: 'Interference (Young’s slits)' },
+    description: {
+      fr: 'Franges d’interférence de deux fentes : interfrange i = λ·D / a.',
+      en: 'Two-slit interference fringes: fringe spacing i = λ·D / a.',
+    },
+    icon: YoungIcon,
+    component: YoungSimulation,
   },
   {
     id: 'titration',
