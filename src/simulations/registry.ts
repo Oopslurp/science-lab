@@ -11,6 +11,7 @@ import ProjectileIcon from './projectile/ProjectileIcon';
 import KineticsIcon from './kinetics/KineticsIcon';
 import IdealGasIcon from './idealgas/IdealGasIcon';
 import LargeNumbersIcon from './largenumbers/LargeNumbersIcon';
+import SynthesisIcon from './synthesis/SynthesisIcon';
 
 // Composants chargés en différé : Recharts & co ne sont téléchargés qu'à l'ouverture
 // d'une simulation, pas sur la galerie d'accueil.
@@ -25,6 +26,7 @@ const ProjectileSimulation = lazy(() => import('./projectile/ProjectileSimulatio
 const KineticsSimulation = lazy(() => import('./kinetics/KineticsSimulation'));
 const IdealGasSimulation = lazy(() => import('./idealgas/IdealGasSimulation'));
 const LargeNumbersSimulation = lazy(() => import('./largenumbers/LargeNumbersSimulation'));
+const SynthesisSimulation = lazy(() => import('./synthesis/SynthesisSimulation'));
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -153,5 +155,16 @@ export const simulations: SimulationMeta[] = [
     },
     icon: EquilibriumIcon,
     component: EquilibriumSimulation,
+  },
+  {
+    id: 'synthesis',
+    category: 'chemistry',
+    title: { fr: 'Synthèse organique', en: 'Organic synthesis' },
+    description: {
+      fr: 'Parcours multi-étapes : choisir des réactions pour atteindre une molécule cible au meilleur rendement.',
+      en: 'Multi-step route: pick reactions to reach a target molecule with the best yield.',
+    },
+    icon: SynthesisIcon,
+    component: SynthesisSimulation,
   },
 ];
