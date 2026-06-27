@@ -10,6 +10,7 @@ import KeplerIcon from './kepler/KeplerIcon';
 import ProjectileIcon from './projectile/ProjectileIcon';
 import KineticsIcon from './kinetics/KineticsIcon';
 import IdealGasIcon from './idealgas/IdealGasIcon';
+import LargeNumbersIcon from './largenumbers/LargeNumbersIcon';
 
 // Composants chargés en différé : Recharts & co ne sont téléchargés qu'à l'ouverture
 // d'une simulation, pas sur la galerie d'accueil.
@@ -23,6 +24,7 @@ const KeplerSimulation = lazy(() => import('./kepler/KeplerSimulation'));
 const ProjectileSimulation = lazy(() => import('./projectile/ProjectileSimulation'));
 const KineticsSimulation = lazy(() => import('./kinetics/KineticsSimulation'));
 const IdealGasSimulation = lazy(() => import('./idealgas/IdealGasSimulation'));
+const LargeNumbersSimulation = lazy(() => import('./largenumbers/LargeNumbersSimulation'));
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -52,6 +54,17 @@ export const simulations: SimulationMeta[] = [
     },
     icon: EulerIcon,
     component: EulerSimulation,
+  },
+  {
+    id: 'largenumbers',
+    category: 'maths',
+    title: { fr: 'Loi des grands nombres', en: 'Law of large numbers' },
+    description: {
+      fr: 'Concentration des moyennes et inégalité de Bienaymé-Tchebychev (borne pessimiste).',
+      en: 'Concentration of sample means and the Bienaymé-Chebyshev inequality (pessimistic bound).',
+    },
+    icon: LargeNumbersIcon,
+    component: LargeNumbersSimulation,
   },
   {
     id: 'decay',
