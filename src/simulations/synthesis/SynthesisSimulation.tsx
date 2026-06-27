@@ -127,15 +127,15 @@ const content = {
     table: { reaction: 'Réaction', type: 'Type', yield: 'Rendement' },
     theory: [
       'Une synthèse organique transforme un réactif de départ en un produit cible par une suite de réactions, chacune ne modifiant qu’un seul groupe caractéristique (le squelette à 3 carbones, lui, ne change pas). À chaque étape tu choisis une réaction ; le rendement cumulé est le produit des rendements des étapes prises.',
-      'Cinq types de réaction sont rencontrés : oxydoréduction (oxydation ou réduction), acide-base, substitution, addition et élimination. Reconnaître le type aide à prévoir le groupe formé.',
+      'Cinq types de réaction sont rencontrés : oxydoréduction (oxydation ou réduction), acide-base, substitution, addition et élimination. Reconnaître le type aide à prévoir le groupe formé. L’amidification (acide → amide) est rangée ici en acide-base et simplifiée : en réalité l’acide et l’amine donnent d’abord un sel d’ammonium (étape acide-base), et l’amide n’apparaît qu’après chauffage ou activation.',
       'Optimiser une synthèse, c’est atteindre la cible avec le meilleur rendement possible — donc souvent le moins d’étapes, car chaque étape fait chuter le rendement cumulé. Les rendements affichés sont illustratifs (mise en scène pédagogique), pas des données de laboratoire réelles. À noter aussi : l’estérification et l’amidification consomment un second réactif en excès (un alcool, ou de l’ammoniac/une amine), non suivi ici.',
       'Protection / déprotection (en synthèse réelle, pas dans ce jeu) : lorsqu’une molécule porte plusieurs groupes réactifs, on masque temporairement celui qu’on veut préserver (protection) avant de transformer l’autre, puis on le libère (déprotection). Ici le modèle ne suit qu’un seul groupe à la fois, il n’y a donc jamais de second groupe à protéger — mais c’est une étape clé d’une vraie synthèse.',
-      'Une simplification assumée : l’addition de HX sur l’alcène. Le jeu représente chaque famille par une seule structure ; or, d’après la règle de Markovnikov, l’addition de HX sur le propène donne surtout l’halogénoalcane secondaire, pas la structure primaire générique utilisée ici. Un vrai chimiste doit suivre la structure exacte à chaque étape — c’est ce qui rend une vraie synthèse plus complexe que ce parcours simplifié.',
+      'Une simplification assumée : le jeu représente chaque famille par une seule structure (le squelette à 3 carbones), donc il fusionne les isomères de position. Deux conséquences : (1) l’addition de HX sur le propène donne en réalité l’halogénoalcane secondaire (règle de Markovnikov), pas la structure primaire générique utilisée ici ; (2) certains enchaînements — par ex. alcool secondaire → halogénoalcane → alcool primaire — déplacent en fait la position du groupe, ce qu’une vraie synthèse ne fait pas « gratuitement ». Un vrai chimiste doit suivre la structure exacte à chaque étape : c’est ce qui rend une vraie synthèse plus complexe que ce parcours simplifié.',
     ],
     observe: [
       'Le rendement global chute vite avec le nombre d’étapes : pour un meilleur rendement, vise le moins d’étapes possible (capacité du programme : justifier l’augmentation du rendement d’une synthèse).',
       'Défi B (alcène → amide) : le tout premier choix conditionne tout le reste — passer par l’halogénoalcane (5 étapes) bat le détour par l’alcool secondaire (6 étapes).',
-      'Défi C (cétone → ester) : le détour est chimiquement obligatoire — un alcool secondaire ne s’oxyde pas directement en acide, il faut repasser par un alcool primaire. Ce n’est pas un manque d’imagination, c’est la chimie.',
+      'Défi C (cétone → ester) : un alcool secondaire ne s’oxyde pas directement en acide, d’où un détour obligé par un alcool primaire (le jeu fusionne ici des isomères de position — voir la théorie). Le détour est imposé par la chimie, pas par un manque d’imagination.',
     ],
     curriculum:
       'Terminale spécialité physique-chimie : élaborer une séquence réactionnelle à partir d’une banque de réactions (capacité explicite), identifier les types de réaction (oxydoréduction, acide-base, substitution, addition, élimination), notion de protection/déprotection, et optimisation du rendement d’une synthèse multi-étapes.',
@@ -204,15 +204,15 @@ const content = {
     table: { reaction: 'Reaction', type: 'Type', yield: 'Yield' },
     theory: [
       'An organic synthesis turns a starting reactant into a target product through a sequence of reactions, each changing a single functional group (the 3-carbon skeleton itself stays the same). At every step you pick a reaction; the cumulative yield is the product of the yields of the steps taken.',
-      'Five reaction types are encountered: redox (oxidation or reduction), acid–base, substitution, addition and elimination. Recognising the type helps predict the group formed.',
+      'Five reaction types are encountered: redox (oxidation or reduction), acid–base, substitution, addition and elimination. Recognising the type helps predict the group formed. Amidification (acid → amide) is filed here under acid–base and simplified: in reality the acid and the amine first give an ammonium salt (an acid–base step), and the amide only forms after heating or activation.',
       'Optimising a synthesis means reaching the target with the best possible yield — so, often, the fewest steps, since each step lowers the cumulative yield. The yields shown are illustrative (a teaching device), not real laboratory data. Note too that esterification and amidification consume a second reactant in excess (an alcohol, or ammonia/an amine), not tracked here.',
       'Protection / deprotection (in real synthesis, not in this game): when a molecule carries several reactive groups, the one to preserve is temporarily masked (protection) before transforming the other, then freed again (deprotection). Here the model follows a single group at a time, so there is never a second group to protect — but it is a key step of a real synthesis.',
-      'An acknowledged simplification: HX addition onto the alkene. The game represents each family by a single structure; yet, by Markovnikov’s rule, adding HX to propene mostly gives the secondary haloalkane, not the generic primary structure used here. A real chemist must follow the exact structure at every step — which is what makes a real synthesis more complex than this simplified route.',
+      'An acknowledged simplification: the game represents each family by a single structure (the 3-carbon skeleton), so it merges positional isomers. Two consequences: (1) adding HX to propene actually gives the secondary haloalkane (Markovnikov’s rule), not the generic primary structure used here; (2) some chains — e.g. secondary alcohol → haloalkane → primary alcohol — actually move the position of the group, which a real synthesis cannot do “for free”. A real chemist must follow the exact structure at every step: that is what makes a real synthesis more complex than this simplified route.',
     ],
     observe: [
       'The overall yield drops fast with the number of steps: for a better yield, aim for as few steps as possible (a syllabus skill: justifying the increase of a synthesis yield).',
       'Challenge B (alkene → amide): the very first choice dictates everything else — going through the haloalkane (5 steps) beats the detour via the secondary alcohol (6 steps).',
-      'Challenge C (ketone → ester): the detour is chemically mandatory — a secondary alcohol does not oxidise directly to an acid, you must go back through a primary alcohol. Not a lack of imagination, just chemistry.',
+      'Challenge C (ketone → ester): a secondary alcohol does not oxidise directly to an acid, hence a mandatory detour via a primary alcohol (here the game merges positional isomers — see the theory). The detour is forced by chemistry, not by a lack of imagination.',
     ],
     curriculum:
       'Final-year specialty physics-chemistry: build a reaction sequence from a reaction bank (explicit skill), identify reaction types (redox, acid–base, substitution, addition, elimination), the notion of protection/deprotection, and optimisation of the yield of a multi-step synthesis.',
@@ -298,6 +298,7 @@ export default function SynthesisSimulation({ meta }: SimulationComponentProps) 
                 <button
                   key={ch.id}
                   type="button"
+                  aria-pressed={ch.id === challengeId}
                   onClick={() => selectChallenge(ch.id)}
                   className={challengeBtnClass(ch.id === challengeId)}
                 >

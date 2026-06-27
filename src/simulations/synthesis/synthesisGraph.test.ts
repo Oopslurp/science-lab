@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CHALLENGES, GROUPS, REACTIONS } from './synthesisData';
+import { CHALLENGES, GROUPS, REACTIONS, type GroupId } from './synthesisData';
 import { availableReactions, findAllPaths, findBestPath } from './synthesisGraph';
 
 describe('synthesisData (banque)', () => {
@@ -26,6 +26,17 @@ describe('synthesisData (banque)', () => {
   it('exactement les 5 familles attendues — aucune protection/déprotection', () => {
     const families = [...new Set(REACTIONS.map((r) => r.family))].sort();
     expect(families).toEqual(['acid-base', 'addition', 'elimination', 'redox', 'substitution']);
+  });
+
+  it('mapping famille/détail de réactions clés (verrou anti-régression)', () => {
+    const find = (from: GroupId, to: GroupId) =>
+      REACTIONS.find((r) => r.from === from && r.to === to);
+    expect(find('alcohol1', 'aldehyde')).toMatchObject({ family: 'redox', detail: 'mildOxidation' });
+    expect(find('carboxylicacid', 'ester')).toMatchObject({ family: 'substitution', detail: 'esterification' });
+    expect(find('carboxylicacid', 'amide')).toMatchObject({ family: 'acid-base', detail: 'amidification' });
+    expect(find('alkene', 'haloalkane')).toMatchObject({ family: 'addition', detail: 'hxAddition' });
+    expect(find('alkene', 'alcohol2')).toMatchObject({ family: 'addition', detail: 'hydration' });
+    expect(find('haloalkane', 'alkene')).toMatchObject({ family: 'elimination', detail: 'elimination' });
   });
 });
 
