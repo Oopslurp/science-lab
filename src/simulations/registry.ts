@@ -8,6 +8,7 @@ import EquilibriumIcon from './equilibrium/EquilibriumIcon';
 import YoungIcon from './young/YoungIcon';
 import KeplerIcon from './kepler/KeplerIcon';
 import ProjectileIcon from './projectile/ProjectileIcon';
+import KineticsIcon from './kinetics/KineticsIcon';
 
 // Composants chargés en différé : Recharts & co ne sont téléchargés qu'à l'ouverture
 // d'une simulation, pas sur la galerie d'accueil.
@@ -19,6 +20,7 @@ const EquilibriumSimulation = lazy(() => import('./equilibrium/EquilibriumSimula
 const YoungSimulation = lazy(() => import('./young/YoungSimulation'));
 const KeplerSimulation = lazy(() => import('./kepler/KeplerSimulation'));
 const ProjectileSimulation = lazy(() => import('./projectile/ProjectileSimulation'));
+const KineticsSimulation = lazy(() => import('./kinetics/KineticsSimulation'));
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -92,6 +94,17 @@ export const simulations: SimulationMeta[] = [
     },
     icon: ProjectileIcon,
     component: ProjectileSimulation,
+  },
+  {
+    id: 'kinetics',
+    category: 'chemistry',
+    title: { fr: 'Cinétique chimique', en: 'Chemical kinetics' },
+    description: {
+      fr: 'Réaction d’ordre 1 : concentration et vitesse, demi-réaction et effet d’un catalyseur.',
+      en: 'First-order reaction: concentration and rate, half-reaction and catalyst effect.',
+    },
+    icon: KineticsIcon,
+    component: KineticsSimulation,
   },
   {
     id: 'titration',
