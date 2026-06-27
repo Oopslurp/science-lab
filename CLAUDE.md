@@ -62,6 +62,8 @@ Un module de simulation = dossier `src/simulations/<id>/` contenant :
 - Garde anti-boucle-infinie sur les fonctions à boucle dépendant d'un pas/seuil
   (ex. `halfLifeMarkers` si `t½ ≤ 0`, `measureOrbitalPeriod` si `dt ≤ 0`).
 - Fonctions d'échantillonnage : normaliser `const n = Math.max(1, Math.floor(samples))`.
+- Fonctions produisant une **taille de tableau / un nombre d'itérations** : garde aussi NaN/Infinity
+  (helper type `toCount` → fallback). `new Array(Infinity)` **jette**, une boucle non bornée gèle l'onglet.
 - **Toute constante non triviale est nommée + exportée + commentée** (sens physique/math).
 - Tester les cas limites en Vitest **en même temps** que la simulation.
 
@@ -94,12 +96,52 @@ Un module de simulation = dossier `src/simulations/<id>/` contenant :
   - Vérif vis-viva : `semiMajorAxis = GM/(2GM/r₀ − v₀²)` (= r₀ au circulaire),
     `orbitalPeriod = 2π√(a³/GM)`, comparé à `measureOrbitalPeriod` (numérique). Période mesurée
     pour **toute orbite liée** (cercle ET ellipse). Tolérance test 0,5 % (erreur réelle ≤ 0,06 %).
+- **projectile** (physique) : mouvement dans un champ uniforme. `M_REF=1` sert **seulement** aux
+  énergies (n'influe PAS sur la trajectoire). Toggle **pesanteur / champ électrique** = vocabulaire
+  seul (`g` et `a=qE/m` = même variable numérique). `Em` **constante** (conservation). Animation à
+  **cadence proportionnelle au temps de vol** (bornée), pas fixe.
+- **kinetics** (chimie) : ordre 1 `[A]=[A]₀e^(−kt)`, `v=k·[A]`, **2 courbes liées** empilées
+  (concentration + vitesse). **3ᵉ exponentielle de l'app** → garde-fous **obligatoires** : contraste
+  explicite avec **decay** (`k` modifiable vs `λ` immuable), catalyseur = change la **vitesse, PAS
+  l'état final**. Curseur **doses de catalyseur**, `catalystFactor=1+doses·gain` **illustratif**. Stat
+  « État final [A]∞ » = **vraie limite** (0 si k>0, [A]₀ si k=0), PAS `[A](t_max)`.
+- **idealgas** (physique) : `P=nRT/V`, conversions L→m³ et Pa→bar, garde `V≤0`. Boîte de particules =
+  **mise en scène** (réflexion élastique, **pas de collision particule-particule**, vitesse ∝√T).
+  **Nombre de particules ∝ n** (borné `MIN/MAX_PARTICLES`), illustratif (pas une mole). Animation
+  **continue** ; `Math.random` pour l'agitation (visuel, non seedé **exprès**, ≠ decay).
+- **largenumbers** (maths) : loi des grands nombres + **Bienaymé-Tchebychev**. 3 lois (dé/pièce/
+  uniforme), `k∈{1,2,3}` en **boutons** (pas curseur). Comparaison centrale **proportion réelle vs
+  borne `1−1/k²`** : la borne porte sur la **probabilité**, pas la proportion finie → opérateur ≥/<
+  **dynamique**, texte nuancé. PRNG **mulberry32 seedé** (stable hors « Relancer », reproductible en
+  test). `sampleMean` utilise **TOUS les n** tirages (`MAX_DISPLAYED_DRAWS` ne borne que l'affichage).
+  Gardes perf `MAX_TOTAL_DRAWS`/`clampSampleN` + `toCount` (NaN/∞ → fallback).
+- **synthesis** (chimie, **FORMAT INÉDIT**) :
+  - **Pas de curseurs ni de courbe** : un **jeu** de parcours. Données pures `synthesisData.ts`
+    (10 groupes, 16 réactions, 3 défis) ; graphe `synthesisGraph.ts`.
+  - `findAllPaths`/`findBestPath` = **DFS exhaustive de chemins simples** (graphe minuscule, pas
+    d'algo de plus court chemin). `findBestPath` maximise le **produit des rendements**, `null` si
+    aucun chemin. Le **jeu n'interdit PAS** de boucler/revenir ; seul `findBestPath` suppose des
+    chemins simples. On gagne quand groupe courant = cible.
+  - **Rendements illustratifs** (pas des données labo). Modèle à **un seul groupe à la fois** →
+    protection/déprotection = **théorie seule, jamais une carte**. **Simplification Markovnikov**
+    signalée (alcène→halogénoalcane). `amine` = **impasse** voulue (aucune réaction n'en repart).
+  - **`FAMILY_COLORS`** (dans `synthesisData.ts`) = **code catégoriel** par famille (PAS la vraie
+    couleur du produit), **système unique** réutilisé par le ballon + les cartes + la vue d'ensemble ;
+    légende honnête affichée.
+  - **Vue d'ensemble** (tableau des 16 réactions) **débloquée seulement après un défi réussi**
+    (`unlocked` persistant), PAS un graphe de nœuds.
+  - Références figées par tests : A `haloalkane→ester` 37,3 % (4 ét., unique) ; B `alkene→amide`
+    25,2 % via haloalkane (> 14,4 % via alcohol2) ; C `ketone→ester` 22,3 % (6 ét., forcé).
 
 ## Animations
 - Boucle via `requestAnimationFrame` dans un `useEffect`, nettoyage `cancelAnimationFrame`.
 - Plafonner le `dt` réel : `Math.min(dt, 0.1)` (anti-saut au retour d'onglet).
 - Kepler : pas fixe + **accumulateur de sous-pas** plafonné (`MAX_SUBSTEPS`), état physique dans
   des **refs** (pas de re-rendu par sous-pas), `setView` une fois par frame.
+- Animations **one-shot sans keyframes ni config** : transition CSS (`opacity`/`transform`)
+  déclenchée au **montage** via `requestAnimationFrame`, et **remontage par `key`** pour rejouer et
+  **éviter l'accumulation** (ex. `Chip`, crossfade `MoleculeBadge`, bulles `SynthesisFlask` ;
+  `useAnimatedNumber` pour le défilé d'un nombre). Pas de boucle continue (sobriété).
 
 ## Accessibilité
 - `aria-label` + `<title>` sur chaque visualisation. `useId` pour tout identifiant SVG
