@@ -6,6 +6,7 @@ import { getCategory } from '../categories';
 import { pick, type SimulationComponentProps } from '../types';
 import {
   CHALLENGES,
+  FAMILY_COLORS,
   getGroup,
   type GroupId,
   type Reaction,
@@ -15,6 +16,7 @@ import {
 import { availableReactions, findBestPath } from './synthesisGraph';
 import MoleculeBadge from './MoleculeBadge';
 import ReactionOverview from './ReactionOverview';
+import SynthesisFlask from './SynthesisFlask';
 
 /** Anime une valeur numérique vers `target` (easeOut), pour le défilé du rendement. */
 function useAnimatedNumber(target: number, duration = 450): number {
@@ -118,6 +120,9 @@ const content = {
       bestLabel: 'Meilleur chemin possible',
       overviewShow: 'Voir la banque de réactions',
       overviewHide: 'Masquer la banque de réactions',
+      flaskTitle: 'Ballon de synthèse : le liquide prend la couleur du type de la dernière réaction',
+      colorNote:
+        'La couleur du liquide indique le type de réaction (code visuel) — ce n’est pas la vraie couleur du produit.',
     },
     table: { reaction: 'Réaction', type: 'Type', yield: 'Rendement' },
     theory: [
@@ -192,6 +197,9 @@ const content = {
       bestLabel: 'Best possible path',
       overviewShow: 'Show the reaction bank',
       overviewHide: 'Hide the reaction bank',
+      flaskTitle: 'Synthesis flask: the liquid takes the colour of the last reaction type',
+      colorNote:
+        'The liquid colour shows the reaction type (a visual code) — it is not the real colour of the product.',
     },
     table: { reaction: 'Reaction', type: 'Type', yield: 'Yield' },
     theory: [
@@ -227,6 +235,7 @@ export default function SynthesisSimulation({ meta }: SimulationComponentProps) 
   const [path, setPath] = useState<Reaction[]>([]);
   const [unlocked, setUnlocked] = useState(false); // vue d'ensemble débloquée après 1 défi réussi
   const [showOverview, setShowOverview] = useState(false);
+  const [pulseKey, setPulseKey] = useState(0); // incrémenté à chaque clic de carte (bulles du ballon)
 
   const challenge = CHALLENGES.find((ch) => ch.id === challengeId) ?? CHALLENGES[0];
   const start = challenge.start;
@@ -237,6 +246,9 @@ export default function SynthesisSimulation({ meta }: SimulationComponentProps) 
   const cumulative = path.reduce((acc, s) => acc * s.yield, 1);
   const reached = current === target;
   const available = availableReactions(current);
+
+  // Couleur (catégorielle) du liquide = type de la dernière réaction effectuée ; vide sinon.
+  const liquidColor = path.length > 0 ? FAMILY_COLORS[path[path.length - 1].family] : null;
 
   const animatedYield = useAnimatedNumber(cumulative);
   const best = useMemo(() => findBestPath(start, target), [start, target]);
@@ -251,7 +263,10 @@ export default function SynthesisSimulation({ meta }: SimulationComponentProps) 
     setChallengeId(id);
     setPath([]);
   };
-  const chooseReaction = (r: Reaction) => setPath((p) => [...p, r]);
+  const chooseReaction = (r: Reaction) => {
+    setPath((p) => [...p, r]);
+    setPulseKey((k) => k + 1); // déclenche les bulles (uniquement sur un clic de carte)
+  };
   const undo = () => setPath((p) => p.slice(0, -1));
   const restart = () => setPath([]);
 
@@ -326,12 +341,22 @@ export default function SynthesisSimulation({ meta }: SimulationComponentProps) 
             <span className="font-mono text-slate-500">{getGroup(target)?.formula}</span>
           </p>
 
-          {/* Badge « tu es ici » (fondu + pulsation au changement) */}
-          <MoleculeBadge
-            hereLabel={c.ui.here}
-            name={c.groups[current]}
-            formula={getGroup(current)?.formula ?? ''}
-          />
+          {/* Badge « tu es ici » + ballon de synthèse décoratif */}
+          <div className="space-y-1.5">
+            <div className="flex items-stretch gap-3">
+              <div className="flex-1">
+                <MoleculeBadge
+                  hereLabel={c.ui.here}
+                  name={c.groups[current]}
+                  formula={getGroup(current)?.formula ?? ''}
+                />
+              </div>
+              <div className="flex items-center">
+                <SynthesisFlask color={liquidColor} pulseKey={pulseKey} title={c.ui.flaskTitle} />
+              </div>
+            </div>
+            <p className="text-[11px] leading-snug text-slate-400">{c.ui.colorNote}</p>
+          </div>
 
           {/* Fil du chemin parcouru (nouvelle puce en fondu) */}
           <div className="flex flex-wrap items-center gap-1.5 text-sm">
@@ -408,9 +433,13 @@ export default function SynthesisSimulation({ meta }: SimulationComponentProps) 
                       c.groups[r.to],
                       pctStep(r.yield)
                     )}
-                    className="flex flex-col gap-1 rounded-xl border border-slate-200 bg-white p-3 text-left transition-colors hover:border-accent hover:bg-accent/5"
+                    style={{ borderLeftColor: FAMILY_COLORS[r.family] }}
+                    className="flex flex-col gap-1 rounded-xl border border-l-4 border-slate-200 bg-white p-3 text-left transition-colors hover:bg-slate-50"
                   >
-                    <span className="text-[11px] font-semibold uppercase tracking-wide text-accent">
+                    <span
+                      className="text-[11px] font-semibold uppercase tracking-wide"
+                      style={{ color: FAMILY_COLORS[r.family] }}
+                    >
                       {c.families[r.family]} · {c.details[r.detail]}
                     </span>
                     <span className="text-sm font-medium text-slate-900">→ {c.groups[r.to]}</span>

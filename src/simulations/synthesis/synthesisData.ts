@@ -51,6 +51,20 @@ export function getGroup(id: GroupId): FunctionalGroup | undefined {
 /** Les 5 familles de réaction rencontrées (programme de terminale). */
 export type ReactionFamily = 'redox' | 'acid-base' | 'substitution' | 'addition' | 'elimination';
 
+/**
+ * Couleur par famille de réaction — CODE CATÉGORIEL pour repérer le type d'un coup d'œil,
+ * PAS la vraie couleur du produit chimique. Palette sobre tirée de celle de l'app
+ * (indigo/cyan/émeraude/ambre/violet), réutilisée par le ballon, les cartes et la vue
+ * d'ensemble (un seul système de couleurs).
+ */
+export const FAMILY_COLORS: Record<ReactionFamily, string> = {
+  redox: '#4f46e5', // indigo (accent)
+  substitution: '#0891b2', // cyan
+  addition: '#059669', // émeraude
+  elimination: '#d97706', // ambre
+  'acid-base': '#7c3aed', // violet
+};
+
 /** Détail i18n (traduit dans le `content` du composant, pas ici). */
 export type ReactionDetail =
   | 'mildOxidation'

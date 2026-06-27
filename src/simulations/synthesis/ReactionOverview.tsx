@@ -1,4 +1,10 @@
-import { REACTIONS, type GroupId, type ReactionDetail, type ReactionFamily } from './synthesisData';
+import {
+  FAMILY_COLORS,
+  REACTIONS,
+  type GroupId,
+  type ReactionDetail,
+  type ReactionFamily,
+} from './synthesisData';
 
 interface ReactionOverviewProps {
   groups: Record<GroupId, string>;
@@ -29,8 +35,11 @@ export default function ReactionOverview({ groups, families, details, labels }: 
               <td className="whitespace-nowrap px-3 py-2 text-slate-800">
                 {groups[r.from]} → {groups[r.to]}
               </td>
-              <td className="px-3 py-2 text-slate-500">
-                {families[r.family]} · {details[r.detail]}
+              <td className="px-3 py-2">
+                <span className="font-medium" style={{ color: FAMILY_COLORS[r.family] }}>
+                  {families[r.family]}
+                </span>
+                <span className="text-slate-500"> · {details[r.detail]}</span>
               </td>
               <td className="px-3 py-2 text-right font-mono tabular-nums text-slate-700">
                 {Math.round(r.yield * 100)} %
