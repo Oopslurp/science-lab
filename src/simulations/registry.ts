@@ -9,6 +9,7 @@ import YoungIcon from './young/YoungIcon';
 import KeplerIcon from './kepler/KeplerIcon';
 import ProjectileIcon from './projectile/ProjectileIcon';
 import KineticsIcon from './kinetics/KineticsIcon';
+import IdealGasIcon from './idealgas/IdealGasIcon';
 
 // Composants chargés en différé : Recharts & co ne sont téléchargés qu'à l'ouverture
 // d'une simulation, pas sur la galerie d'accueil.
@@ -21,6 +22,7 @@ const YoungSimulation = lazy(() => import('./young/YoungSimulation'));
 const KeplerSimulation = lazy(() => import('./kepler/KeplerSimulation'));
 const ProjectileSimulation = lazy(() => import('./projectile/ProjectileSimulation'));
 const KineticsSimulation = lazy(() => import('./kinetics/KineticsSimulation'));
+const IdealGasSimulation = lazy(() => import('./idealgas/IdealGasSimulation'));
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -94,6 +96,17 @@ export const simulations: SimulationMeta[] = [
     },
     icon: ProjectileIcon,
     component: ProjectileSimulation,
+  },
+  {
+    id: 'idealgas',
+    category: 'physics',
+    title: { fr: 'Gaz parfait', en: 'Ideal gas' },
+    description: {
+      fr: 'Équation d’état P·V = n·R·T : pression, volume, température et agitation des particules.',
+      en: 'Equation of state P·V = n·R·T: pressure, volume, temperature and particle agitation.',
+    },
+    icon: IdealGasIcon,
+    component: IdealGasSimulation,
   },
   {
     id: 'kinetics',
