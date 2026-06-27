@@ -38,6 +38,15 @@ function clamp01(x: number): number {
   return Math.min(1, Math.max(0, x));
 }
 
+/**
+ * Convertit une valeur en entier ≥ 1 SÛR. NaN/Infinity → `fallback` : indispensable pour
+ * ne jamais faire `new Array(Infinity)` (qui jette) ni boucler indéfiniment (cf. CLAUDE.md).
+ */
+function toCount(value: number, fallback = 1): number {
+  if (!Number.isFinite(value)) return fallback;
+  return Math.max(1, Math.floor(value));
+}
+
 export interface LawStats {
   mean: number; // μ
   variance: number; // σ²
@@ -71,7 +80,7 @@ export function drawOne(law: LawId, p: number, rng: () => number): number {
 
 /** n tirages bruts d'un échantillon (sert à l'animation d'un échantillon représentatif). */
 export function sampleDraws(law: LawId, p: number, n: number, rng: () => number): number[] {
-  const m = Math.max(1, Math.floor(n));
+  const m = toCount(n);
   const out = new Array<number>(m);
   for (let i = 0; i < m; i++) out[i] = drawOne(law, p, rng);
   return out;
@@ -87,7 +96,7 @@ export function average(values: number[]): number {
 
 /** Moyenne Mₙ d'un échantillon de n tirages (utilise TOUS les n tirages). */
 export function sampleMean(law: LawId, p: number, n: number, rng: () => number): number {
-  const m = Math.max(1, Math.floor(n));
+  const m = toCount(n);
   let s = 0;
   for (let i = 0; i < m; i++) s += drawOne(law, p, rng);
   return s / m;
@@ -95,9 +104,9 @@ export function sampleMean(law: LawId, p: number, n: number, rng: () => number):
 
 /** Garde perf : limite N pour que n × N ≤ MAX_TOTAL_DRAWS. */
 export function clampSampleN(n: number, N: number): number {
-  const m = Math.max(1, Math.floor(n));
+  const m = toCount(n);
   const maxN = Math.max(1, Math.floor(MAX_TOTAL_DRAWS / m));
-  return Math.min(Math.max(1, Math.floor(N)), maxN);
+  return Math.min(toCount(N), maxN);
 }
 
 /** N moyennes Mₙ (N borné par clampSampleN). rng par défaut = Math.random (exécution). */
@@ -122,7 +131,7 @@ export function chebyshevBound(k: number): number {
 
 /** Demi-largeur de la bande de concentration : k·σ/√n. */
 export function bandHalfWidth(std: number, n: number, k: number): number {
-  const m = Math.max(1, Math.floor(n));
+  const m = toCount(n);
   return (k * std) / Math.sqrt(m);
 }
 
@@ -148,13 +157,13 @@ export function histogramBins(
   lo: number,
   hi: number
 ): HistogramBin[] {
-  const b = Math.max(1, Math.floor(binCount));
-  let a = lo;
-  let z = hi;
+  const b = toCount(binCount);
+  let a = Number.isFinite(lo) ? lo : 0;
+  let z = Number.isFinite(hi) ? hi : a + 1;
   if (!(z > a)) {
     // dégénéré (toutes les valeurs identiques) : fenêtre minimale autour de la valeur
-    a = lo - 0.5;
-    z = hi + 0.5;
+    a = a - 0.5;
+    z = z + 0.5;
   }
   const width = (z - a) / b;
   const bins: HistogramBin[] = Array.from({ length: b }, (_, i) => ({
@@ -164,6 +173,7 @@ export function histogramBins(
     count: 0,
   }));
   for (const v of values) {
+    if (!Number.isFinite(v)) continue; // ignore les valeurs dégénérées
     let idx = Math.floor((v - a) / width);
     if (idx < 0) idx = 0;
     else if (idx >= b) idx = b - 1;

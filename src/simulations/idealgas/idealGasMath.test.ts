@@ -48,6 +48,8 @@ describe('idealGasMath', () => {
     expect(particleCount(0.1)).toBe(MIN_PARTICLES); // arrondi 2, plancher
     expect(particleCount(1000)).toBe(MAX_PARTICLES); // plafonné
     expect(particleCount(-5)).toBe(MIN_PARTICLES); // garde : n négatif ⇒ MIN
+    expect(particleCount(NaN)).toBe(MIN_PARTICLES); // garde : NaN ⇒ MIN
+    expect(particleCount(Infinity)).toBe(MIN_PARTICLES); // garde : Infinity ⇒ MIN
   });
 
   it('vitesse relative ∝ √T (mise en scène)', () => {
@@ -55,5 +57,7 @@ describe('idealGasMath', () => {
     expect(relativeSpeed(1200)).toBeCloseTo(2, 12); // ×4 en T ⇒ ×2 en vitesse
     expect(relativeSpeed(0)).toBe(0);
     expect(relativeSpeed(-100)).toBe(0); // garde : T négatif ⇒ 0
+    expect(relativeSpeed(NaN)).toBe(0); // garde : NaN ⇒ 0
+    expect(relativeSpeed(Infinity)).toBe(0); // garde : Infinity ⇒ 0
   });
 });

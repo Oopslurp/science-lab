@@ -82,6 +82,7 @@ const content = {
     presets: { earth: 'Terre', moon: 'Lune', mars: 'Mars', custom: 'Personnalisé' },
     buttons: { play: '▶ Lancer', pause: '❚❚ Pause', reset: '↺ Réinitialiser' },
     stats: { range: 'Portée R', height: 'Hauteur max H', flight: 'Temps de vol', em: 'Énergie méca. Em' },
+    legend: { apex: 'Sommet', landing: 'Atterrissage' },
     energy: { time: 't (s)', ec: 'Ec (cinétique)', em: 'Em (mécanique)' },
     trajAria: 'Trajectoire parabolique du projectile, avec le sommet et le point d’atterrissage.',
     energyAria: 'Courbes des énergies cinétique, potentielle et mécanique au cours du vol.',
@@ -126,6 +127,7 @@ const content = {
     presets: { earth: 'Earth', moon: 'Moon', mars: 'Mars', custom: 'Custom' },
     buttons: { play: '▶ Launch', pause: '❚❚ Pause', reset: '↺ Reset' },
     stats: { range: 'Range R', height: 'Max height H', flight: 'Flight time', em: 'Mech. energy Em' },
+    legend: { apex: 'Apex', landing: 'Landing' },
     energy: { time: 't (s)', ec: 'Ec (kinetic)', em: 'Em (mechanical)' },
     trajAria: 'Parabolic trajectory of the projectile, with the apex and the landing point.',
     energyAria: 'Kinetic, potential and mechanical energy curves during the flight.',
@@ -337,8 +339,8 @@ export default function ProjectileSimulation({ meta }: SimulationComponentProps)
               { color: ENERGY_COLORS.ec, label: c.energy.ec, variant: 'line' },
               { color: ENERGY_COLORS.ep, label: m.epName, variant: 'line' },
               { color: ENERGY_COLORS.em, label: c.energy.em, variant: 'line', dashed: true },
-              { color: TRAJ_COLORS.apex, label: lang === 'fr' ? 'Sommet' : 'Apex', variant: 'dot' },
-              { color: TRAJ_COLORS.landing, label: lang === 'fr' ? 'Atterrissage' : 'Landing', variant: 'dot' },
+              { color: TRAJ_COLORS.apex, label: c.legend.apex, variant: 'dot' },
+              { color: TRAJ_COLORS.landing, label: c.legend.landing, variant: 'dot' },
             ]}
           />
         </div>

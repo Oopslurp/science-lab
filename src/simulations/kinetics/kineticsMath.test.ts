@@ -40,6 +40,8 @@ describe('kineticsMath', () => {
     expect(catalystFactor(0)).toBe(1); // aucune dose ⇒ aucun effet
     expect(catalystFactor(3)).toBeCloseTo(1 + 3 * CATALYST_GAIN_PER_DOSE, 12);
     expect(catalystFactor(-2)).toBe(1); // garde : doses négatives ⇒ 1
+    expect(catalystFactor(NaN)).toBe(1); // garde : NaN ⇒ 1
+    expect(effectiveK(Infinity, 2)).toBe(0); // garde : k non fini ⇒ 0
     expect(effectiveK(k, 0)).toBe(k);
     for (const doses of [1, 2, 5]) {
       const f = catalystFactor(doses);

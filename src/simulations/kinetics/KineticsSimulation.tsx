@@ -9,7 +9,6 @@ import { pick, type SimulationComponentProps } from '../types';
 import {
   MAX_CATALYST_DOSES,
   catalystFactor,
-  concentration,
   effectiveK,
   halfTime,
   kineticsSeries,
@@ -181,7 +180,7 @@ export default function KineticsSimulation({ meta }: SimulationComponentProps) {
             items={[
               { label: c.stats.keff, value: `${kEff.toFixed(2)} s⁻¹` },
               { label: c.stats.half, value: halfText, emphasize: true },
-              { label: c.stats.final, value: `≈ ${concentration(tMax, a0, kEff).toFixed(2)} mol/L` },
+              { label: c.stats.final, value: `${(kEff > 0 ? 0 : a0).toFixed(2)} mol/L` },
             ]}
           />
         </div>

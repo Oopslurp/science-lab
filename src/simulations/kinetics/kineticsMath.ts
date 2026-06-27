@@ -20,14 +20,16 @@ export const CATALYST_GAIN_PER_DOSE = 1;
 /** Nombre maximal de doses proposé par le curseur. */
 export const MAX_CATALYST_DOSES = 5;
 
-/** Facteur multiplicatif de k pour un nombre de doses : 1 + doses·gain (0 dose ⇒ ×1). */
+/** Facteur multiplicatif de k pour un nombre de doses : 1 + doses·gain (0 dose ⇒ ×1).
+ *  doses non fini → 0 dose (retour fini documenté). */
 export function catalystFactor(doses: number): number {
-  const d = Math.max(0, Math.floor(doses)); // garde : entier ≥ 0
+  const d = Number.isFinite(doses) ? Math.max(0, Math.floor(doses)) : 0;
   return 1 + d * CATALYST_GAIN_PER_DOSE;
 }
 
-/** Constante de vitesse effective compte tenu du catalyseur. */
+/** Constante de vitesse effective compte tenu du catalyseur. k non fini → 0. */
 export function effectiveK(k: number, doses: number): number {
+  if (!Number.isFinite(k)) return 0;
   return k * catalystFactor(doses);
 }
 

@@ -36,11 +36,11 @@ const content = {
     theory: [
       'La loi des grands nombres dit que la moyenne Mₙ d’un échantillon de n tirages se rapproche de l’espérance μ quand n grandit. On le visualise en simulant N échantillons et en traçant l’histogramme de leurs moyennes : il se resserre autour de μ.',
       'L’inégalité de Bienaymé-Tchebychev quantifie cette concentration sans connaître la loi : pour la bande de demi-largeur k·σ/√n autour de μ, P(|Mₙ − μ| < k·σ/√n) ≥ 1 − 1/k². Soit ≥ 0 % pour k = 1 (borne triviale), ≥ 75 % pour k = 2, ≥ 88,9 % pour k = 3.',
-      'Compare la proportion RÉELLE observée dans la bande à cette borne GARANTIE : la réalité la dépasse largement. La borne est volontairement pessimiste (valable pour n’importe quelle loi de variance finie), d’où l’écart — et cet écart vaut quelle que soit la loi choisie.',
+      'La proportion RÉELLE observée dans la bande estime cette probabilité : en pratique elle dépasse largement la borne GARANTIE, volontairement pessimiste (valable pour n’importe quelle loi de variance finie). Sur un nombre fini d’échantillons elle fluctue et peut, rarement, passer sous la borne ; mais l’écart reste en général grand, quelle que soit la loi.',
     ],
     observe: [
       'Augmente n : l’histogramme des moyennes se resserre autour de μ (loi des grands nombres).',
-      'La proportion réelle dans la bande dépasse toujours la borne garantie 1 − 1/k², et de loin — change de loi (dé, pièce, uniforme) : la conclusion tient.',
+      'La proportion réelle dans la bande dépasse en général largement la borne garantie 1 − 1/k² — change de loi (dé, pièce, uniforme) : la conclusion tient.',
       'k = 1 donne une borne de 0 % : vraie mais inutile (c’est normal et pédagogique). k = 2 et k = 3 deviennent informatives (75 % et 88,9 %).',
       'Relance plusieurs fois : la proportion réelle fluctue un peu mais reste bien au-dessus de la garantie.',
     ],
@@ -55,7 +55,7 @@ const content = {
       k: 'Écart k (bande k·σ/√n)',
     },
     relaunch: '↺ Relancer',
-    compare: { real: 'Proportion réelle dans la bande', bound: 'Borne garantie (1 − 1/k²)', ge: '≥' },
+    compare: { real: 'Proportion réelle dans la bande', bound: 'Borne garantie (1 − 1/k²)', ge: '≥', lt: '<' },
     stats: { mu: 'Espérance μ', sigma: 'Écart-type σ', band: 'Demi-bande kσ/√n', effN: 'N effectif' },
     clampNote: (effN: number) => `N réduit à ${effN} (garde-fou ${MAX_TOTAL_DRAWS.toLocaleString('fr-FR')} tirages).`,
     histAria: 'Histogramme des moyennes des N échantillons, avec l’espérance μ et la bande de concentration.',
@@ -72,11 +72,11 @@ const content = {
     theory: [
       'The law of large numbers states that the mean Mₙ of a sample of n draws gets closer to the expectation μ as n grows. We visualise it by simulating N samples and plotting the histogram of their means: it tightens around μ.',
       'The Bienaymé-Chebyshev inequality quantifies this concentration without knowing the law: for the band of half-width k·σ/√n around μ, P(|Mₙ − μ| < k·σ/√n) ≥ 1 − 1/k². That is ≥ 0% for k = 1 (trivial bound), ≥ 75% for k = 2, ≥ 88.9% for k = 3.',
-      'Compare the REAL proportion observed in the band with this GUARANTEED bound: reality far exceeds it. The bound is deliberately pessimistic (valid for any finite-variance law), hence the gap — and that gap holds whatever the chosen law.',
+      'The REAL proportion observed in the band estimates this probability: in practice it far exceeds the GUARANTEED bound, which is deliberately pessimistic (valid for any finite-variance law). Over a finite number of samples it fluctuates and may, rarely, dip below the bound; but the gap usually stays large, whatever the law.',
     ],
     observe: [
       'Increase n: the histogram of means tightens around μ (law of large numbers).',
-      'The real proportion in the band always exceeds the guaranteed bound 1 − 1/k², by a lot — switch law (die, coin, uniform): the conclusion holds.',
+      'The real proportion in the band usually exceeds the guaranteed bound 1 − 1/k² by a lot — switch law (die, coin, uniform): the conclusion holds.',
       'k = 1 gives a 0% bound: true but useless (normal and instructive). k = 2 and k = 3 become informative (75% and 88.9%).',
       'Relaunch several times: the real proportion fluctuates a little but stays well above the guarantee.',
     ],
@@ -91,7 +91,7 @@ const content = {
       k: 'Spread k (band k·σ/√n)',
     },
     relaunch: '↺ Relaunch',
-    compare: { real: 'Real proportion in the band', bound: 'Guaranteed bound (1 − 1/k²)', ge: '≥' },
+    compare: { real: 'Real proportion in the band', bound: 'Guaranteed bound (1 − 1/k²)', ge: '≥', lt: '<' },
     stats: { mu: 'Expectation μ', sigma: 'Std deviation σ', band: 'Half-band kσ/√n', effN: 'effective N' },
     clampNote: (effN: number) => `N reduced to ${effN} (safeguard ${MAX_TOTAL_DRAWS.toLocaleString('en-US')} draws).`,
     histAria: 'Histogram of the N sample means, with the expectation μ and the concentration band.',
@@ -260,7 +260,14 @@ export default function LargeNumbersSimulation({ meta }: SimulationComponentProp
               <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">{c.compare.real}</p>
               <p className="mt-1 text-2xl font-bold text-accent tabular-nums">{(realProp * 100).toFixed(1)} %</p>
             </div>
-            <span className="text-lg font-semibold text-slate-400">{c.compare.ge}</span>
+            <span
+              className={
+                'text-lg font-semibold ' +
+                (realProp >= bound ? 'text-slate-400' : 'text-amber-500')
+              }
+            >
+              {realProp >= bound ? c.compare.ge : c.compare.lt}
+            </span>
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">{c.compare.bound}</p>
               <p className="mt-1 text-2xl font-bold text-slate-700 tabular-nums">{(bound * 100).toFixed(1)} %</p>

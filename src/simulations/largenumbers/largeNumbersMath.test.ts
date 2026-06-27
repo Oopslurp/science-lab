@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   DICE_VARIANCE,
+  MAX_DISPLAYED_DRAWS,
   MAX_TOTAL_DRAWS,
   UNIFORM_VARIANCE,
   type LawId,
@@ -13,6 +14,8 @@ import {
   lawStats,
   mulberry32,
   proportionInBand,
+  sampleDraws,
+  sampleMean,
   simulateMeans,
 } from './largeNumbersMath';
 
@@ -109,6 +112,22 @@ describe('largeNumbersMath', () => {
     const means = simulateMeans('dice', 0, n, N, mulberry32(1));
     // length effective × n ne dépasse pas le budget
     expect(means.length * n).toBeLessThanOrEqual(MAX_TOTAL_DRAWS);
+  });
+
+  it('robustesse : n NaN/Infinity ne plante pas (ni throw ni boucle infinie)', () => {
+    expect(() => simulateMeans('dice', 0, Infinity, 10, mulberry32(1))).not.toThrow();
+    expect(() => sampleDraws('coin', 0.5, Infinity, mulberry32(1))).not.toThrow();
+    expect(sampleDraws('coin', 0.5, Infinity, mulberry32(1))).toHaveLength(1); // fallback 1
+    expect(clampSampleN(Infinity, 10)).toBeGreaterThanOrEqual(1);
+    expect(clampSampleN(10, NaN)).toBeGreaterThanOrEqual(1);
+    expect(simulateMeans('dice', 0, NaN, 5, mulberry32(1)).length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('la moyenne Mₙ utilise TOUS les n tirages (le plafond d’affichage ne tronque pas le calcul)', () => {
+    const big = MAX_DISPLAYED_DRAWS * 4; // bien au-delà du plafond d'affichage
+    // pièce p = 1 ⇒ chaque tirage vaut 1, donc Mₙ = 1 quel que soit n
+    expect(sampleDraws('coin', 1, big, mulberry32(3))).toHaveLength(big);
+    expect(sampleMean('coin', 1, big, mulberry32(3))).toBeCloseTo(1, 12);
   });
 
   it('histogramBins : comptage total conservé, classes régulières', () => {

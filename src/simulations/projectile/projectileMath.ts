@@ -30,21 +30,26 @@ export interface Point {
   y: number;
 }
 
-/** Temps de vol t_vol = 2·v₀·sin θ / g. g ≤ 0 → 0 (retour fini documenté). */
+/** Entrées dégénérées communes (g ≤ 0, ou v₀/θ non finis) → grandeurs nulles documentées. */
+function degenerate(v0: number, thetaDeg: number, g: number): boolean {
+  return !(g > 0) || !Number.isFinite(v0) || !Number.isFinite(thetaDeg);
+}
+
+/** Temps de vol t_vol = 2·v₀·sin θ / g. Entrée dégénérée → 0 (retour fini documenté). */
 export function flightTime(v0: number, thetaDeg: number, g: number): number {
-  if (!(g > 0)) return 0;
+  if (degenerate(v0, thetaDeg, g)) return 0;
   return (2 * v0 * Math.sin(thetaRad(thetaDeg))) / g;
 }
 
-/** Portée R = v₀²·sin(2θ) / g. g ≤ 0 → 0. */
+/** Portée R = v₀²·sin(2θ) / g. Entrée dégénérée → 0. */
 export function range(v0: number, thetaDeg: number, g: number): number {
-  if (!(g > 0)) return 0;
+  if (degenerate(v0, thetaDeg, g)) return 0;
   return (v0 * v0 * Math.sin(2 * thetaRad(thetaDeg))) / g;
 }
 
-/** Hauteur maximale H = (v₀·sin θ)² / (2g). g ≤ 0 → 0. */
+/** Hauteur maximale H = (v₀·sin θ)² / (2g). Entrée dégénérée → 0. */
 export function maxHeight(v0: number, thetaDeg: number, g: number): number {
-  if (!(g > 0)) return 0;
+  if (degenerate(v0, thetaDeg, g)) return 0;
   const vy0 = v0 * Math.sin(thetaRad(thetaDeg));
   return (vy0 * vy0) / (2 * g);
 }
@@ -86,7 +91,7 @@ export function mechanicalEnergy(t: number, v0: number, thetaDeg: number, g: num
 export function trajectory(v0: number, thetaDeg: number, g: number, samples = 120): Point[] {
   const n = Math.max(1, Math.floor(samples));
   const tEnd = flightTime(v0, thetaDeg, g);
-  if (!(tEnd > 0)) return [position(0, v0, thetaDeg, g)]; // dégénéré : un seul point
+  if (!(tEnd > 0)) return [{ x: 0, y: 0 }]; // dégénéré : un seul point fini
   const pts: Point[] = [];
   for (let i = 0; i <= n; i++) {
     pts.push(position((tEnd * i) / n, v0, thetaDeg, g));
@@ -107,7 +112,8 @@ export function energySeries(v0: number, thetaDeg: number, g: number, samples = 
   const tEnd = flightTime(v0, thetaDeg, g);
   if (!(tEnd > 0)) {
     const ec = kineticEnergy(0, v0, thetaDeg, g);
-    return [{ t: 0, ec, ep: 0, em: ec }];
+    const safeEc = Number.isFinite(ec) ? ec : 0; // dégénéré → énergies finies
+    return [{ t: 0, ec: safeEc, ep: 0, em: safeEc }];
   }
   const pts: EnergyPoint[] = [];
   for (let i = 0; i <= n; i++) {

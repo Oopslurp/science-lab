@@ -20,9 +20,11 @@ export const PARTICLES_PER_MOL = 20;
 export const MIN_PARTICLES = 2; // au moins quelques points, même à très petit n
 export const MAX_PARTICLES = 120; // plafond de lisibilité / performance
 
-/** Nombre de particules à dessiner pour une quantité n (mol) : ∝ n, borné. */
+/** Nombre de particules à dessiner pour une quantité n (mol) : ∝ n, borné.
+ *  n non fini (NaN/Infinity) → MIN_PARTICLES (retour fini documenté). */
 export function particleCount(n: number): number {
-  const count = Math.round(Math.max(0, n) * PARTICLES_PER_MOL);
+  const safe = Number.isFinite(n) ? Math.max(0, n) : 0;
+  const count = Math.round(safe * PARTICLES_PER_MOL);
   return Math.min(MAX_PARTICLES, Math.max(MIN_PARTICLES, count));
 }
 
@@ -54,5 +56,6 @@ export function toBar(pa: number): number {
  */
 export const SPEED_T_REF = 300; // K
 export function relativeSpeed(T: number): number {
-  return Math.sqrt(Math.max(0, T) / SPEED_T_REF);
+  const t = Number.isFinite(T) ? Math.max(0, T) : 0; // garde NaN/Infinity → 0
+  return Math.sqrt(t / SPEED_T_REF);
 }

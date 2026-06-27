@@ -101,5 +101,9 @@ describe('projectileMath', () => {
     expect(range(20, 45, 0)).toBe(0);
     expect(maxHeight(20, 45, 0)).toBe(0);
     expect(range(20, 45, -5)).toBe(0);
+    // entrées non finies (NaN/Infinity) → 0 fini, jamais NaN/Infinity
+    expect(range(NaN, 45, EARTH_G)).toBe(0);
+    expect(flightTime(20, NaN, EARTH_G)).toBe(0);
+    expect(maxHeight(Infinity, 45, EARTH_G)).toBe(0);
   });
 });
