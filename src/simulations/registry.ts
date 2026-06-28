@@ -6,6 +6,7 @@ import TitrationIcon from './titration/TitrationIcon';
 import RiemannIcon from './riemann/RiemannIcon';
 import BisectionIcon from './bisection/BisectionIcon';
 import ConvexityIcon from './convexity/ConvexityIcon';
+import GaltonIcon from './galton/GaltonIcon';
 import EquilibriumIcon from './equilibrium/EquilibriumIcon';
 import YoungIcon from './young/YoungIcon';
 import KeplerIcon from './kepler/KeplerIcon';
@@ -26,6 +27,7 @@ const TitrationSimulation = lazy(() => import('./titration/TitrationSimulation')
 const RiemannSimulation = lazy(() => import('./riemann/RiemannSimulation'));
 const BisectionSimulation = lazy(() => import('./bisection/BisectionSimulation'));
 const ConvexitySimulation = lazy(() => import('./convexity/ConvexitySimulation'));
+const GaltonSimulation = lazy(() => import('./galton/GaltonSimulation'));
 const EquilibriumSimulation = lazy(() => import('./equilibrium/EquilibriumSimulation'));
 const YoungSimulation = lazy(() => import('./young/YoungSimulation'));
 const KeplerSimulation = lazy(() => import('./kepler/KeplerSimulation'));
@@ -99,6 +101,17 @@ export const simulations: SimulationMeta[] = [
     },
     icon: ConvexityIcon,
     component: ConvexitySimulation,
+  },
+  {
+    id: 'galton',
+    category: 'maths',
+    title: { fr: 'Planche de Galton', en: 'Galton board' },
+    description: {
+      fr: 'Billes tombant à travers des clous : la loi binomiale émerge et tend vers la cloche normale.',
+      en: 'Balls falling through pegs: the binomial law emerges and tends to the normal bell.',
+    },
+    icon: GaltonIcon,
+    component: GaltonSimulation,
   },
   {
     id: 'decay',
