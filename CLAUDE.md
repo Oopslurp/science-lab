@@ -123,8 +123,11 @@ Un module de simulation = dossier `src/simulations/<id>/` contenant :
     aucun chemin. Le **jeu n'interdit PAS** de boucler/revenir ; seul `findBestPath` suppose des
     chemins simples. On gagne quand groupe courant = cible.
   - **Rendements illustratifs** (pas des données labo). Modèle à **un seul groupe à la fois** →
-    protection/déprotection = **théorie seule, jamais une carte**. **Simplification Markovnikov**
-    signalée (alcène→halogénoalcane). `amine` = **impasse** voulue (aucune réaction n'en repart).
+    protection/déprotection = **théorie seule, jamais une carte**. `amine` = **impasse** voulue.
+  - **Fusion des isomères de position** assumée et **divulguée** en théorie (une structure par
+    famille) : Markovnikov (alcène→halogénoalcane) ET `alcool 2ᵈᵉ→halogénoalcane→alcool 1ᵉʳ`
+    (déplace en fait le groupe). **Amidification** rangée en `acid-base` mais simplifiée (sel
+    d'ammonium puis activation), divulguée — choix « 5 familles » assumé (revue Codex).
   - **`FAMILY_COLORS`** (dans `synthesisData.ts`) = **code catégoriel** par famille (PAS la vraie
     couleur du produit), **système unique** réutilisé par le ballon + les cartes + la vue d'ensemble ;
     légende honnête affichée.
