@@ -135,6 +135,43 @@ Un module de simulation = dossier `src/simulations/<id>/` contenant :
     (`unlocked` persistant), PAS un graphe de nœuds.
   - Références figées par tests : A `haloalkane→ester` 37,3 % (4 ét., unique) ; B `alkene→amide`
     25,2 % via haloalkane (> 14,4 % via alcohol2) ; C `ketone→ester` 22,3 % (6 ét., forcé).
+- **bisection** (maths) : liste **fermée** de 4 fonctions à racine connue (√2, nombre **plastique**,
+  nombre de **Dottie**, ln 3). `bisectionSteps` = suite des encadrements, **indice n = après n
+  bissections** (indice 0 = intervalle initial) ; arrêt si `f(m)=0` ; `MAX_ITER=30` (au-delà, largeur
+  sous le seuil des doubles). Garde `hasSignChange` (TVI). Bornes **a ≥ 0** ⇒ chaque fonction n'a
+  qu'**une** racine accessible ⇒ l'erreur `|xₙ−r|` vise toujours la bonne. Fenêtre de tracé fixe.
+- **convexity** (maths) : 4 fonctions à **dérivées analytiques** (`d1`/`d2` données, jamais de dérivation
+  numérique). Inflexions **exactes** en données ; **eˣ = aucune** (contre-exemple assumé). Courbe **colorée
+  par le signe de f″** (indigo convexe / ambre concave) → l'inflexion = changement de couleur. Effet
+  **aimant** `snapToInflection` (atteint les inflexions hors grille, ex. kπ). **Cercle osculateur** =
+  complément **hors-programme** assumé : dessiné en **ELLIPSE** (image affine — échelles X/Y différentes,
+  contact d'ordre 2 préservé) avec **fondu** (seuils nommés) quand R devient trop grand, `null` près d'une
+  inflexion (R→∞). Mention « courbe tracée seulement sur [a,b] » (la fonction existe partout, c'est
+  l'affichage qu'on borne). Repère **aéré** par des marges.
+- **galton** (maths) : loi **binomiale**. `binomialCoefficient` = formule **MULTIPLICATIVE + symétrie**
+  (pas de factorielle, pas de débordement). Histogramme observé (**proportions**) comparé à la binomiale
+  **exacte** ET à l'**approximation normale** (cloche), **même échelle** (÷ max des probas). Animation :
+  billes dans des **refs**, `Math.random` au runtime (visuel, **non seedé**, ≠ largenumbers seedé), cap
+  `MAX_ANIMATED_BALLS=50`. **Phase d'entrée** (`d` négatif, `GALTON_ENTRY_DEPTH`) : les billes tombent
+  **d'au-dessus** du 1ᵉʳ clou (sinon elles « naissent » dessus). Bouton « lâcher 200 » = comptage instantané.
+- **doppler** (physique) : `perceivedFrequency = f0·c/(c−vRadial)`, `vRadial` = **composante** de la vitesse
+  **vers l'observateur** (`radialVelocity`). `SOUND_SPEED=340` ; `clampSpeed` à **±0,9·c** (Infinity si
+  supersonique). Modèle **ACOUSTIQUE seul** (pas de bascule EM ; note honnête que la lumière suit une
+  formule relativiste). Animation = **MISE EN SCÈNE** : le resserrement des fronts ne dépend que de **v/c**
+  (célérité visuelle découplée de f0 réel, trop élevé pour être animé) ; valeurs quantitatives via la
+  formule. Couleur de l'observateur = **convention astrophysique** : approche = **BLEU** (blueshift),
+  éloignement = **ROUGE** (redshift) — ne pas réinverser. État dans des **refs**, `v` lue via ref.
+- **predominance** (chimie) : `f(HA)=1/(1+10^(pH−pKA))` et `f(A⁻)` **complémentaires** (50/50 à pH=pKA).
+  `predominantForm` = frontière **au pKA**. Diagramme de distribution (Recharts) **+** diagramme de
+  prédominance (axe de pH **coupé au pKA**). Un **indicateur** est un couple acide/base : sa **zone de
+  virage** est superposée (phénolphtaléine **8,2–10,0**) → relie la prédominance au **choix d'indicateur**
+  de titrage. Garde `distributionCurve` NaN/∞ → repli.
+- **battery** (chimie) : `Q_max = n₀·z·F`, `FARADAY_CONSTANT=96485`, **z=2** pour les 3 piles.
+  `lifetime = Q_max/I` (**Infinity si I≤0**). Tension `dischargeVoltage = emf·(1−e^(−SoC/τ))` = modèle
+  **ILLUSTRATIF « plateau puis chute »** (pas une vraie courbe de décharge). Animation = vitesse
+  **proportionnelle à la durée de vie réelle** (bornée), vraie durée `t` en stat ; le curseur est une
+  **fraction déchargée** (%), PAS le temps. **Changer de pile ne change ni la charge ni la durée** (z=2
+  partout) mais la **f.é.m.** → l'**ÉNERGIE** `E≈Q·U` : distinction **capacité (mAh) vs énergie (J)**.
 
 ## Animations
 - Boucle via `requestAnimationFrame` dans un `useEffect`, nettoyage `cancelAnimationFrame`.
