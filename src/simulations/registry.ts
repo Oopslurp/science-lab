@@ -5,6 +5,7 @@ import DecayIcon from './decay/DecayIcon';
 import TitrationIcon from './titration/TitrationIcon';
 import RiemannIcon from './riemann/RiemannIcon';
 import BisectionIcon from './bisection/BisectionIcon';
+import ConvexityIcon from './convexity/ConvexityIcon';
 import EquilibriumIcon from './equilibrium/EquilibriumIcon';
 import YoungIcon from './young/YoungIcon';
 import KeplerIcon from './kepler/KeplerIcon';
@@ -21,6 +22,7 @@ const DecaySimulation = lazy(() => import('./decay/DecaySimulation'));
 const TitrationSimulation = lazy(() => import('./titration/TitrationSimulation'));
 const RiemannSimulation = lazy(() => import('./riemann/RiemannSimulation'));
 const BisectionSimulation = lazy(() => import('./bisection/BisectionSimulation'));
+const ConvexitySimulation = lazy(() => import('./convexity/ConvexitySimulation'));
 const EquilibriumSimulation = lazy(() => import('./equilibrium/EquilibriumSimulation'));
 const YoungSimulation = lazy(() => import('./young/YoungSimulation'));
 const KeplerSimulation = lazy(() => import('./kepler/KeplerSimulation'));
@@ -80,6 +82,17 @@ export const simulations: SimulationMeta[] = [
     },
     icon: BisectionIcon,
     component: BisectionSimulation,
+  },
+  {
+    id: 'convexity',
+    category: 'maths',
+    title: { fr: 'Convexité et inflexions', en: 'Convexity and inflections' },
+    description: {
+      fr: 'Convexité d’une courbe, signe de f″ et points d’inflexion, lus sur la tangente.',
+      en: 'Convexity of a curve, sign of f″ and inflection points, read off the tangent.',
+    },
+    icon: ConvexityIcon,
+    component: ConvexitySimulation,
   },
   {
     id: 'decay',
