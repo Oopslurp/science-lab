@@ -4,6 +4,7 @@ import EulerIcon from './euler/EulerIcon';
 import DecayIcon from './decay/DecayIcon';
 import TitrationIcon from './titration/TitrationIcon';
 import RiemannIcon from './riemann/RiemannIcon';
+import BisectionIcon from './bisection/BisectionIcon';
 import EquilibriumIcon from './equilibrium/EquilibriumIcon';
 import YoungIcon from './young/YoungIcon';
 import KeplerIcon from './kepler/KeplerIcon';
@@ -19,6 +20,7 @@ const EulerSimulation = lazy(() => import('./euler/EulerSimulation'));
 const DecaySimulation = lazy(() => import('./decay/DecaySimulation'));
 const TitrationSimulation = lazy(() => import('./titration/TitrationSimulation'));
 const RiemannSimulation = lazy(() => import('./riemann/RiemannSimulation'));
+const BisectionSimulation = lazy(() => import('./bisection/BisectionSimulation'));
 const EquilibriumSimulation = lazy(() => import('./equilibrium/EquilibriumSimulation'));
 const YoungSimulation = lazy(() => import('./young/YoungSimulation'));
 const KeplerSimulation = lazy(() => import('./kepler/KeplerSimulation'));
@@ -67,6 +69,17 @@ export const simulations: SimulationMeta[] = [
     },
     icon: LargeNumbersIcon,
     component: LargeNumbersSimulation,
+  },
+  {
+    id: 'bisection',
+    category: 'maths',
+    title: { fr: 'Méthode de dichotomie', en: 'Bisection method' },
+    description: {
+      fr: 'Résoudre f(x) = 0 par encadrements successifs : un intervalle qui se divise en deux à chaque pas.',
+      en: 'Solving f(x) = 0 by successive bracketing: an interval halved at each step.',
+    },
+    icon: BisectionIcon,
+    component: BisectionSimulation,
   },
   {
     id: 'decay',
