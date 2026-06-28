@@ -57,7 +57,9 @@ describe('titrationMath', () => {
     expect(regionAt(P, 30)).toBe('after');
   });
 
-  it('titrationCurve : samples+1 points', () => {
+  it('titrationCurve : samples+1 points, garde NaN/∞', () => {
     expect(titrationCurve(P, 40, 240)).toHaveLength(241);
+    expect(titrationCurve(P, 40, Infinity)).toHaveLength(241); // pas de boucle non bornée
+    expect(titrationCurve(P, 40, NaN)).toHaveLength(241);
   });
 });

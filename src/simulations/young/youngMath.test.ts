@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { interfringe, intensity, wavelengthToRgb } from './youngMath';
+import { intensityProfile, interfringe, intensity, wavelengthToRgb } from './youngMath';
 
 describe('youngMath', () => {
   it('interfringe i = λD/a (500 nm, 2 m, 0,5 mm) = 2 mm', () => {
@@ -24,6 +24,11 @@ describe('youngMath', () => {
     expect(intensity(500, 2, 0.5, 0)).toBeCloseTo(1, 10);
     expect(intensity(500, 2, 0.5, i / 2)).toBeCloseTo(0, 10);
     expect(intensity(500, 2, 0.5, i)).toBeCloseTo(1, 10);
+  });
+
+  it('intensityProfile : garde samples NaN/∞ (pas de boucle non bornée)', () => {
+    expect(intensityProfile(500, 2, 0.5, Infinity)).toHaveLength(241);
+    expect(intensityProfile(500, 2, 0.5, NaN)).toHaveLength(241);
   });
 
   it('wavelengthToRgb : canaux entiers dans [0,255], teintes cohérentes', () => {

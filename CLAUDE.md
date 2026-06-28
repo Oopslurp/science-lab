@@ -55,13 +55,18 @@ Un module de simulation = dossier `src/simulations/<id>/` contenant :
   depuis `navigator.language`, et fixe `<html lang>`.
 
 ## Conventions de calcul (modules `*Math.ts`)
-- **Robustesse** : toute fonction exportée gère 0/NaN/Infinity avec un **retour fini documenté**.
-  **Jamais de `throw`**. Ne **jamais** borner artificiellement des entrées valides.
+- **Robustesse** : toute fonction exportée gère 0/NaN/Infinity **sans `throw`** et sans **jamais
+  geler** l'onglet (aucune boucle non bornée). Le retour est soit **fini documenté**, soit une
+  **sentinelle documentée** (`NaN`/`Infinity`/`[]`/`null`) — les deux sont admis, à condition d'être
+  **documentés ET testés**. Ne **jamais** borner artificiellement des entrées valides.
 - Sentinelles documentées : `riemannSum` → `NaN` si domaine invalide (l'appelant teste
-  `isDomainValid` d'abord) ; helpers de marqueurs/mesure → `[]` ou `null` sur entrée dégénérée.
+  `isDomainValid` d'abord) ; `lifetime`/`perceivedFrequency` → `Infinity` (courant nul / supersonique) ;
+  helpers de marqueurs/mesure → `[]` ou `null` sur entrée dégénérée.
 - Garde anti-boucle-infinie sur les fonctions à boucle dépendant d'un pas/seuil
-  (ex. `halfLifeMarkers` si `t½ ≤ 0`, `measureOrbitalPeriod` si `dt ≤ 0`).
-- Fonctions d'échantillonnage : normaliser `const n = Math.max(1, Math.floor(samples))`.
+  (ex. `halfLifeMarkers` si `t½ ≤ 0` **ou `tMax` non fini**, `measureOrbitalPeriod` si `dt ≤ 0`).
+- Fonctions d'échantillonnage : normaliser **ET** garder NaN/Infinity →
+  `const n = Number.isFinite(samples) ? Math.max(1, Math.floor(samples)) : DÉFAUT;` (sinon
+  `samples = Infinity` ⇒ boucle infinie qui gèle l'onglet). **Toutes** les séries du projet l'appliquent.
 - Fonctions produisant une **taille de tableau / un nombre d'itérations** : garde aussi NaN/Infinity
   (helper type `toCount` → fallback). `new Array(Infinity)` **jette**, une boucle non bornée gèle l'onglet.
 - **Toute constante non triviale est nommée + exportée + commentée** (sens physique/math).
@@ -184,9 +189,12 @@ Un module de simulation = dossier `src/simulations/<id>/` contenant :
   `useAnimatedNumber` pour le défilé d'un nombre). Pas de boucle continue (sobriété).
 
 ## Accessibilité
-- `aria-label` + `<title>` sur chaque visualisation. `useId` pour tout identifiant SVG
-  (`clipPath`, etc.). **Pas d'`aria-live`** sur du contenu qui s'anime en continu (spam lecteur
-  d'écran) ; les panneaux de stats (texte) suffisent.
+- SVG **custom** : `aria-label` + `<title>` + `useId` pour tout identifiant SVG (`clipPath`, etc.).
+- Graphes **Recharts** : `role="img"` + `aria-label` sur le conteneur **suffisent** (équivalent
+  accepté ; un `<title>` SVG interne n'est pas trivial avec Recharts et serait redondant). Ne pas
+  le compter comme manque d'a11y en revue.
+- **Pas d'`aria-live`** sur du contenu qui s'anime en continu (spam lecteur d'écran) ; les panneaux
+  de stats (texte) suffisent.
 
 ## Style
 - Tailwind. Sobre/académique : ardoise/marine + accent **indigo** (`accent` dans la config).

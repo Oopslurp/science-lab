@@ -8,6 +8,7 @@ import {
   maxHeight,
   mechanicalEnergy,
   range,
+  trajectory,
 } from './projectileMath';
 
 // Référence numérique indépendante des formules fermées : on résout y(t) = 0 par
@@ -94,6 +95,12 @@ describe('projectileMath', () => {
       expect(p.ec + p.ep).toBeCloseTo(p.em, 9);
       expect(p.em).toBeCloseTo(em0, 9);
     }
+  });
+
+  it('trajectory / energySeries : garde samples NaN/∞ (pas de boucle non bornée)', () => {
+    expect(trajectory(20, 45, EARTH_G, Infinity)).toHaveLength(121);
+    expect(trajectory(20, 45, EARTH_G, NaN)).toHaveLength(121);
+    expect(energySeries(20, 45, EARTH_G, Infinity)).toHaveLength(121);
   });
 
   it('garde-fou g ≤ 0 : retours finis (pas d’Infinity/NaN)', () => {

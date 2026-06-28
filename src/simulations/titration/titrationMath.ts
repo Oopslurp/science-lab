@@ -64,7 +64,7 @@ export function titrationCurve(
   vMax: number,
   samples = 240
 ): TitrationPoint[] {
-  const n = Math.max(1, Math.floor(samples)); // garde : pas de division par 0
+  const n = Number.isFinite(samples) ? Math.max(1, Math.floor(samples)) : 240; // garde NaN/∞ : pas de boucle non bornée
   const pts: TitrationPoint[] = [];
   for (let i = 0; i <= n; i++) {
     const v = (vMax * i) / n;

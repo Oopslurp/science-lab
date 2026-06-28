@@ -26,7 +26,7 @@ export function decayCurve(
   tMax: number,
   samples = 160
 ): DecayPoint[] {
-  const n = Math.max(1, Math.floor(samples)); // garde : pas de division par 0
+  const n = Number.isFinite(samples) ? Math.max(1, Math.floor(samples)) : 160; // garde NaN/∞ : pas de boucle non bornée
   const pts: DecayPoint[] = [];
   for (let i = 0; i <= n; i++) {
     const t = (tMax * i) / n;
@@ -38,7 +38,7 @@ export function decayCurve(
 /** Points repères aux demi-vies successives : (k·t½, N₀/2^k) tant que ≤ tMax. */
 export function halfLifeMarkers(n0: number, halfLife: number, tMax: number): DecayPoint[] {
   // Garde : t½ ≤ 0 (ou tMax ≤ 0) ferait boucler indéfiniment → liste vide.
-  if (!(halfLife > 0) || !(tMax > 0)) return [];
+  if (!(halfLife > 0) || !(tMax > 0) || !Number.isFinite(tMax)) return [];
   const pts: DecayPoint[] = [];
   for (let k = 1; k * halfLife <= tMax + 1e-9; k++) {
     pts.push({ t: k * halfLife, n: n0 / 2 ** k });

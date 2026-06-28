@@ -66,4 +66,9 @@ describe('equilibriumMath', () => {
   it('dissociationRate = x / C₀', () => {
     expect(dissociationRate(0.1, 0.02)).toBeCloseTo(0.2);
   });
+
+  it('equilibriumCurve : garde samples NaN/∞ (pas de boucle non bornée)', () => {
+    expect(equilibriumCurve(0.1, 0.05, Infinity)).toHaveLength(161);
+    expect(equilibriumCurve(0.1, 0.05, NaN)).toHaveLength(161);
+  });
 });

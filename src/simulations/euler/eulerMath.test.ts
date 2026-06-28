@@ -37,6 +37,11 @@ describe('eulerMath', () => {
     expect(pts[pts.length - 1].x).toBeCloseTo(4);
   });
 
+  it('exactPoints : garde samples NaN/∞ (pas de boucle non bornée)', () => {
+    expect(exactPoints(1, 0.8, 4, Infinity)).toHaveLength(241);
+    expect(exactPoints(1, 0.8, 4, NaN)).toHaveLength(241);
+  });
+
   it('errorSummary : Euler sous-estime la solution exacte pour k>0', () => {
     const s = errorSummary({ y0: 1, k: 0.8, h: 0.5, steps: 8 });
     expect(s.eulerValue).toBeLessThan(s.exactValue);

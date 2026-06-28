@@ -31,7 +31,7 @@ const content = {
       'La fréquence perçue passe d’aiguë (approche) à grave (éloignement) au moment où la source dépasse l’observateur (point fixe).',
       'Augmente la vitesse v : l’écart entre f’ à l’approche et au départ se creuse nettement.',
       'À vitesse faible, l’effet est imperceptible ; c’est pour les sources rapides (sirène, voiture) qu’on l’entend.',
-      'La couleur de l’observateur suit la convention de l’astrophysique : bleu quand la source s’approche (fréquence plus haute, « blueshift »), rouge quand elle s’éloigne (« redshift »).',
+      'La couleur de l’observateur suit la convention de l’astrophysique : bleu quand la source s’approche (fréquence plus haute, « blueshift »), rouge quand elle s’éloigne (« redshift ») — une analogie visuelle, pas une vraie couleur du son.',
     ],
     curriculum:
       'Terminale spécialité physique-chimie : effet Doppler, décalage de fréquence d’une onde émise par une source en mouvement, relation f’ = f0·c / (c − v) et applications (radar, échographie Doppler, décalage spectral en astrophysique).',
@@ -61,7 +61,7 @@ const content = {
       'The perceived frequency goes from high (approaching) to low (receding) just as the source passes the fixed observer.',
       'Increase the speed v: the gap between approaching and receding f’ widens markedly.',
       'At low speed the effect is imperceptible; it is for fast sources (siren, car) that we hear it.',
-      'The observer’s colour follows the astrophysics convention: blue when the source approaches (higher frequency, “blueshift”), red when it recedes (“redshift”).',
+      'The observer’s colour follows the astrophysics convention: blue when the source approaches (higher frequency, “blueshift”), red when it recedes (“redshift”) — a visual analogy, not a real colour of sound.',
     ],
     curriculum:
       'Final-year specialty physics-chemistry: Doppler effect, frequency shift of a wave emitted by a moving source, the relation f’ = f0·c / (c − v) and applications (radar, Doppler ultrasound, spectral shift in astrophysics).',

@@ -31,12 +31,12 @@ const content = {
     theory: [
       'La planche de Galton illustre la loi binomiale. Une bille tombe à travers n rangées de clous ; à chaque clou elle part à droite avec la probabilité p, à gauche sinon. Le numéro de la case d’arrivée k est le nombre de fois où elle est allée à droite.',
       'La probabilité de finir dans la case k suit la loi binomiale P(X = k) = C(n, k)·pᵏ·(1−p)^(n−k), d’espérance μ = n·p et d’écart-type σ = √(n·p·(1−p)). En accumulant beaucoup de billes, l’histogramme épouse cette loi (loi des grands nombres).',
-      'Pour n grand, la loi binomiale prend la forme d’une cloche : c’est son approximation par la loi normale N(μ, σ) (théorème central limite). Avec p = 0,5 la distribution est symétrique ; en décalant p elle se déforme mais tend toujours vers une cloche.',
+      'Pour n grand, la loi binomiale prend la forme d’une cloche : c’est son approximation par la loi normale N(μ, σ) (théorème central limite). Avec p = 0,5 la distribution est symétrique ; cette approximation n’est bonne que si n est assez grand ET p pas trop proche de 0 ou 1 (en pratique n·p et n·(1−p) suffisamment grands).',
     ],
     observe: [
       'Lâche des billes : l’histogramme (barres indigo) se construit case par case et se rapproche de la loi binomiale (verte).',
       'Augmente le nombre de rangées n : la distribution s’élargit et épouse de mieux en mieux la cloche normale (ambre).',
-      'Change p : le sommet se décale vers μ = n·p (à droite si p > 0,5) et la binomiale devient dissymétrique, tout en restant proche de la normale.',
+      'Change p : le sommet se décale vers μ = n·p (à droite si p > 0,5) et la binomiale devient dissymétrique ; essaie p = 0,1 avec n petit — la cloche normale colle alors mal (n·p trop petit).',
       'Plus tu lâches de billes, plus l’écart entre l’histogramme et la loi théorique se réduit — c’est la loi des grands nombres en action.',
     ],
     curriculum:
@@ -51,12 +51,12 @@ const content = {
     theory: [
       'The Galton board illustrates the binomial distribution. A ball falls through n rows of pegs; at each peg it goes right with probability p, otherwise left. The arrival bin k is the number of times it went right.',
       'The probability of ending in bin k follows the binomial law P(X = k) = C(n, k)·pᵏ·(1−p)^(n−k), with mean μ = n·p and standard deviation σ = √(n·p·(1−p)). As many balls accumulate, the histogram matches this law (law of large numbers).',
-      'For large n, the binomial law takes a bell shape: its approximation by the normal law N(μ, σ) (central limit theorem). With p = 0.5 the distribution is symmetric; shifting p skews it but it still tends to a bell.',
+      'For large n, the binomial law takes a bell shape: its approximation by the normal law N(μ, σ) (central limit theorem). With p = 0.5 the distribution is symmetric; this approximation is only good when n is large enough AND p not too close to 0 or 1 (in practice n·p and n·(1−p) large enough).',
     ],
     observe: [
       'Drop balls: the histogram (indigo bars) builds bin by bin and approaches the binomial law (green).',
       'Increase the number of rows n: the distribution widens and matches the normal bell (amber) better and better.',
-      'Change p: the peak shifts towards μ = n·p (right if p > 0.5) and the binomial becomes skewed, while staying close to the normal.',
+      'Change p: the peak shifts towards μ = n·p (right if p > 0.5) and the binomial becomes skewed; try p = 0.1 with small n — the normal bell then fits poorly (n·p too small).',
       'The more balls you drop, the smaller the gap between the histogram and the theoretical law — the law of large numbers at work.',
     ],
     curriculum:

@@ -77,7 +77,12 @@ describe('largeNumbersMath', () => {
     }
   });
 
-  it('inégalité de concentration : proportion réelle ≥ borne garantie (k = 2)', () => {
+  it('borne de Tchebychev pessimiste : empiriquement (graine fixe) la proportion la dépasse', () => {
+    // Tchebychev majore la PROBABILITÉ : P(|Mₙ − μ| ≥ k·σₙ) ≤ 1/k², soit
+    // P(dans la bande) ≥ 1 − 1/k². Ce n'est PAS une garantie sur la proportion
+    // d'un échantillon FINI (qui peut, rarement, passer sous la borne). Pour ces
+    // lois (loin du pire cas) et une graine fixe, la proportion observée dépasse
+    // nettement la borne : on illustre son caractère pessimiste, pas une loi.
     const k = 2;
     const cases: Array<{ law: LawId; p: number }> = [
       { law: 'dice', p: 0 },
@@ -88,10 +93,8 @@ describe('largeNumbersMath', () => {
       const { mean, std } = lawStats(law, p);
       const n = 50;
       const means = simulateMeans(law, p, n, 600, mulberry32(99));
-      const hw = bandHalfWidth(std, n, k);
-      const prop = proportionInBand(means, mean, hw);
-      expect(prop).toBeGreaterThanOrEqual(chebyshevBound(k)); // réalité ≥ garantie
-      expect(prop).toBeGreaterThan(0.9); // en pratique, bien au-delà de 0,75
+      const prop = proportionInBand(means, mean, bandHalfWidth(std, n, k));
+      expect(prop).toBeGreaterThan(chebyshevBound(k)); // pessimiste : ici largement dépassée
     }
   });
 

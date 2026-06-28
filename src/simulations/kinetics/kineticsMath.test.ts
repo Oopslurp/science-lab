@@ -71,5 +71,7 @@ describe('kineticsMath', () => {
     expect(s).toHaveLength(21);
     expect(s[0]).toEqual({ t: 0, a: 1, v: 0.5 });
     expect(kineticsSeries(1, 0.5, 10, 0)).toHaveLength(2); // 0 → normalisé à 1 intervalle
+    expect(kineticsSeries(1, 0.5, 10, Infinity)).toHaveLength(161); // garde NaN/∞
+    expect(kineticsSeries(1, 0.5, 10, NaN)).toHaveLength(161);
   });
 });

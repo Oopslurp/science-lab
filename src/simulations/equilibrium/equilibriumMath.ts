@@ -47,7 +47,7 @@ export interface QrPoint {
 }
 
 export function equilibriumCurve(c0: number, bound: number, samples = 160): QrPoint[] {
-  const n = Math.max(1, Math.floor(samples)); // garde : pas de division par 0
+  const n = Number.isFinite(samples) ? Math.max(1, Math.floor(samples)) : 160; // garde NaN/∞ : pas de boucle non bornée
   const pts: QrPoint[] = [];
   for (let i = 0; i <= n; i++) {
     const xi = (bound * i) / n;

@@ -21,7 +21,7 @@ export default function SimulationGallery() {
               {pick(cat.label, lang)}
             </h3>
             {/* 3 colonnes FIXES dès la tablette (md), 2 sur grand mobile, 1 sur mobile —
-                pas une grille auto-adaptative : Physique (5 cartes) s'affiche en 3 puis 2. */}
+                pas une grille auto-adaptative : chaque catégorie (6 cartes) s'affiche en 2 rangées de 3. */}
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
               {sims.map((s) => (
                 <SimulationCard key={s.id} meta={s} lang={lang} />

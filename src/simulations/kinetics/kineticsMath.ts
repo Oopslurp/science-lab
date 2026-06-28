@@ -67,7 +67,7 @@ export function kineticsSeries(
   tMax: number,
   samples = 160
 ): KineticsPoint[] {
-  const n = Math.max(1, Math.floor(samples)); // garde : pas de division par 0
+  const n = Number.isFinite(samples) ? Math.max(1, Math.floor(samples)) : 160; // garde NaN/∞ : pas de boucle non bornée
   const pts: KineticsPoint[] = [];
   for (let i = 0; i <= n; i++) {
     const t = (tMax * i) / n;

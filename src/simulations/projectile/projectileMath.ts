@@ -89,7 +89,7 @@ export function mechanicalEnergy(t: number, v0: number, thetaDeg: number, g: num
 
 /** Points (x, y) de la trajectoire, de t = 0 à t_vol. Échantillonnage normalisé. */
 export function trajectory(v0: number, thetaDeg: number, g: number, samples = 120): Point[] {
-  const n = Math.max(1, Math.floor(samples));
+  const n = Number.isFinite(samples) ? Math.max(1, Math.floor(samples)) : 120; // garde NaN/∞ : pas de boucle non bornée
   const tEnd = flightTime(v0, thetaDeg, g);
   if (!(tEnd > 0)) return [{ x: 0, y: 0 }]; // dégénéré : un seul point fini
   const pts: Point[] = [];
@@ -108,7 +108,7 @@ export interface EnergyPoint {
 
 /** Séries d'énergies Ec/Ep/Em sur t ∈ [0, t_vol]. Échantillonnage normalisé. */
 export function energySeries(v0: number, thetaDeg: number, g: number, samples = 120): EnergyPoint[] {
-  const n = Math.max(1, Math.floor(samples));
+  const n = Number.isFinite(samples) ? Math.max(1, Math.floor(samples)) : 120; // garde NaN/∞ : pas de boucle non bornée
   const tEnd = flightTime(v0, thetaDeg, g);
   if (!(tEnd > 0)) {
     const ec = kineticEnergy(0, v0, thetaDeg, g);

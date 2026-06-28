@@ -44,4 +44,10 @@ describe('decayMath', () => {
     expect(m[1].n).toBeCloseTo(50);
     expect(m.every((p) => p.t <= 30)).toBe(true);
   });
+
+  it('gardes anti-boucle : samples NaN/∞ et tMax = ∞ (pas de gel)', () => {
+    expect(decayCurve(200, 5, 30, Infinity)).toHaveLength(161);
+    expect(decayCurve(200, 5, 30, NaN)).toHaveLength(161);
+    expect(halfLifeMarkers(200, 5, Infinity)).toEqual([]); // tMax non fini → liste vide
+  });
 });
