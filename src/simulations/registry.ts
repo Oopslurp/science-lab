@@ -16,6 +16,7 @@ import DopplerIcon from './doppler/DopplerIcon';
 import LargeNumbersIcon from './largenumbers/LargeNumbersIcon';
 import SynthesisIcon from './synthesis/SynthesisIcon';
 import PredominanceIcon from './predominance/PredominanceIcon';
+import BatteryIcon from './battery/BatteryIcon';
 
 // Composants chargés en différé : Recharts & co ne sont téléchargés qu'à l'ouverture
 // d'une simulation, pas sur la galerie d'accueil.
@@ -35,6 +36,7 @@ const DopplerSimulation = lazy(() => import('./doppler/DopplerSimulation'));
 const LargeNumbersSimulation = lazy(() => import('./largenumbers/LargeNumbersSimulation'));
 const SynthesisSimulation = lazy(() => import('./synthesis/SynthesisSimulation'));
 const PredominanceSimulation = lazy(() => import('./predominance/PredominanceSimulation'));
+const BatterySimulation = lazy(() => import('./battery/BatterySimulation'));
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -207,6 +209,17 @@ export const simulations: SimulationMeta[] = [
     },
     icon: PredominanceIcon,
     component: PredominanceSimulation,
+  },
+  {
+    id: 'battery',
+    category: 'chemistry',
+    title: { fr: 'Pile électrochimique', en: 'Electrochemical cell' },
+    description: {
+      fr: 'Capacité d’une pile Q = n·z·F, durée de vie et tension de décharge (plateau puis chute).',
+      en: 'Cell capacity Q = n·z·F, lifetime and discharge voltage (plateau then drop).',
+    },
+    icon: BatteryIcon,
+    component: BatterySimulation,
   },
   {
     id: 'synthesis',
