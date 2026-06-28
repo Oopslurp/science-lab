@@ -14,6 +14,7 @@ import KineticsIcon from './kinetics/KineticsIcon';
 import IdealGasIcon from './idealgas/IdealGasIcon';
 import LargeNumbersIcon from './largenumbers/LargeNumbersIcon';
 import SynthesisIcon from './synthesis/SynthesisIcon';
+import PredominanceIcon from './predominance/PredominanceIcon';
 
 // Composants chargés en différé : Recharts & co ne sont téléchargés qu'à l'ouverture
 // d'une simulation, pas sur la galerie d'accueil.
@@ -31,6 +32,7 @@ const KineticsSimulation = lazy(() => import('./kinetics/KineticsSimulation'));
 const IdealGasSimulation = lazy(() => import('./idealgas/IdealGasSimulation'));
 const LargeNumbersSimulation = lazy(() => import('./largenumbers/LargeNumbersSimulation'));
 const SynthesisSimulation = lazy(() => import('./synthesis/SynthesisSimulation'));
+const PredominanceSimulation = lazy(() => import('./predominance/PredominanceSimulation'));
 
 /**
  * Registre des simulations — SOURCE UNIQUE DE VÉRITÉ.
@@ -181,6 +183,17 @@ export const simulations: SimulationMeta[] = [
     },
     icon: EquilibriumIcon,
     component: EquilibriumSimulation,
+  },
+  {
+    id: 'predominance',
+    category: 'chemistry',
+    title: { fr: 'Diagramme de prédominance', en: 'Predominance diagram' },
+    description: {
+      fr: 'Couple acide/base et pKA : proportions des espèces selon le pH et zone de virage d’un indicateur.',
+      en: 'Acid/base couple and pKA: species proportions versus pH and an indicator’s transition range.',
+    },
+    icon: PredominanceIcon,
+    component: PredominanceSimulation,
   },
   {
     id: 'synthesis',
