@@ -12,6 +12,7 @@ import KeplerIcon from './kepler/KeplerIcon';
 import ProjectileIcon from './projectile/ProjectileIcon';
 import KineticsIcon from './kinetics/KineticsIcon';
 import IdealGasIcon from './idealgas/IdealGasIcon';
+import DopplerIcon from './doppler/DopplerIcon';
 import LargeNumbersIcon from './largenumbers/LargeNumbersIcon';
 import SynthesisIcon from './synthesis/SynthesisIcon';
 import PredominanceIcon from './predominance/PredominanceIcon';
@@ -30,6 +31,7 @@ const KeplerSimulation = lazy(() => import('./kepler/KeplerSimulation'));
 const ProjectileSimulation = lazy(() => import('./projectile/ProjectileSimulation'));
 const KineticsSimulation = lazy(() => import('./kinetics/KineticsSimulation'));
 const IdealGasSimulation = lazy(() => import('./idealgas/IdealGasSimulation'));
+const DopplerSimulation = lazy(() => import('./doppler/DopplerSimulation'));
 const LargeNumbersSimulation = lazy(() => import('./largenumbers/LargeNumbersSimulation'));
 const SynthesisSimulation = lazy(() => import('./synthesis/SynthesisSimulation'));
 const PredominanceSimulation = lazy(() => import('./predominance/PredominanceSimulation'));
@@ -150,6 +152,17 @@ export const simulations: SimulationMeta[] = [
     },
     icon: IdealGasIcon,
     component: IdealGasSimulation,
+  },
+  {
+    id: 'doppler',
+    category: 'physics',
+    title: { fr: 'Effet Doppler', en: 'Doppler effect' },
+    description: {
+      fr: 'Source sonore mobile : fronts d’onde resserrés ou étirés et décalage de la fréquence perçue.',
+      en: 'Moving sound source: bunched or stretched wavefronts and a shift in the perceived frequency.',
+    },
+    icon: DopplerIcon,
+    component: DopplerSimulation,
   },
   {
     id: 'kinetics',
