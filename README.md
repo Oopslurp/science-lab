@@ -8,6 +8,12 @@ no database, no account, and no data collection.
 
 Live site: https://oopslurp.github.io/science-lab/
 
+## Preview
+
+![Science Lab simulation gallery](docs/screenshots/gallery.png)
+
+![Radioactive decay simulation](docs/screenshots/decay.png)
+
 ## Simulations
 
 ### Mathematics
@@ -69,4 +75,6 @@ Copyright (c) 2026 Mathieu C.
 
 ## Credits
 
-Created by Mathieu C. with Claude Code.
+Created by Mathieu C.
+
+Development assistance: Claude Code and ChatGPT.
